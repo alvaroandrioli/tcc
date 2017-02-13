@@ -1,0 +1,17 @@
+{
+  "name": "alvaroandrioli-tcc",
+  "description": "TCC",
+  "main": "main.js",
+  "authors": [
+    "AMAndrioli <andriolidevelop@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/alvaroandrioli/tcc",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
