@@ -1,39 +1,34 @@
 import serial.tools.list_ports as list_ports
-from threading import Thread
+from eventEmitter import EventEmitter
 import serial
 
-class SerialController(Thread):
-    def __init__(self):
-        Thread.__init__(self)
-        try:
-            arduinoPort = self.__getArduinoPort()
+ee = EventEmitter()
 
-            self.serialPort = serial.Serial()
-            self.serialPort.port = arduinoPort.device
-            self.serialPort.baudrate = 9600
+def getArduinoPort():
+    arduinoPort = None;
+    ports = list(list_ports.comports())
 
-        except Exception as inst:
-            raise inst
+    for port in ports:
+        if (port.manufacturer.lower().find('arduino') > -1):
+            arduinoPort = port;
+            break;
 
-    def __getArduinoPort(self):
-        arduinoPort = None;
-        ports = list(list_ports.comports())
+    if (not arduinoPort):
+        raise Exception("Arduino Port not found")
 
-        for port in ports:
-            if (port.manufacturer.lower().find('arduino') > -1):
-                arduinoPort = port;
-                break;
+    print('arduinoPort - ')
+    print(arduinoPort)
+    return arduinoPort
 
-        if (not arduinoPort):
-            raise Exception("Arduino Port not found")
+def readSerial():
+    arduinoPort = getArduinoPort()
 
-        print('arduinoPort - ')
-        print(arduinoPort)
-        return arduinoPort
+    serialPort = serial.Serial()
+    serialPort.port = arduinoPort.device
+    serialPort.baudrate = 9600
 
-    def run(self):
-        self.serialPort.open()
+    serialPort.open()
 
-        while (True):
-
-            print(self.serialPort.readline())
+    while (True):
+        readData = serialPort.readline()
+        ee.emit("SERIAL.READ_DATA", readData)

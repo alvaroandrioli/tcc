@@ -1,21 +1,27 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-from serialData import SerialController
 from flask import Flask
+from serialData import readSerial
+from flask_socketio import SocketIO, send
+from threading import Thread
+
+from eventEmitter import EventEmitter
 
 app = Flask(__name__)
+ee = EventEmitter()
+socketio = SocketIO(app)
 
-@app.route("/")
-def hello():
-    return "Hello World! This is powered by Python backend."
+@ee.on('SERIAL.READ_DATA')
+def printSerialData(data):
+    print('É aqui mesmo')
+    print(data)
+
 
 if __name__ == "__main__":
     try:
-        serialController = SerialController()
+        Thread(target = readSerial).start()
 
-        serialController.start()
-
-        app.run(host='127.0.0.1', port=5000)
+        socketio.run(app)
     except Exception as exc:
+        Thread.interrupt_main()
         print(exc)
