@@ -11,14 +11,17 @@
             We are using Node.js <script>document.write(process.versions.node)</script>,
             Chromium <script>document.write(process.versions.chrome)</script>,
             and Electron <script>document.write(process.versions.electron)</script>.
-            <p>Server send request: {{ response }}</p>
+            <button type="button" ng-click="sendEvent()"> Enviar </button>
         </div>
     </body>
 
     <script> require('./renderer.js') </script>
     <!-- BOWER COMPONENTS -->
     <script src="bower_components/angular/angular.min.js"></script>
+    <script src="bower_components/socket.io/socket.io.js"></script>
+    <script src="bower_components/angular-socket-io/socket.min.js"></script>
 
     <!-- APP FILES -->
     <script src="app/app.js"></script>
+    <script src="app/resource/socket.factory.js"></script>
 </html>
