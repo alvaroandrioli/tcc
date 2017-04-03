@@ -13,7 +13,7 @@ let mainWindow
 
 function createWindow () {
 
-    var subpy = require('child_process').spawn('python', ['../server/hello.py']);
+    // var subpy = require('child_process').spawn('python', ['../server/index.py']);
     // Create the browser window.
     mainWindow = new BrowserWindow({width: 800, height: 600});
 
@@ -30,10 +30,10 @@ function createWindow () {
         // in an array if your app supports multi windows, this is the time
         // when you should delete the corresponding element.
         mainWindow = null;
-        subpy.kill('SIGINT');
+        // subpy.kill('SIGINT');
     });
 
-    console.log('Server Start');
+    // console.log('Server Start');
 }
 
 // This method will be called when Electron has finished

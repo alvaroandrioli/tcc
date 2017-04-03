@@ -6,20 +6,22 @@
         </head>
     <body ng-app="controlBenchApp">
         <div ng-controller="mainController">
-            <h1>Hello World!</h1>
-            <!-- All of the Node.js APIs are available in this renderer process. -->
-            We are using Node.js <script>document.write(process.versions.node)</script>,
-            Chromium <script>document.write(process.versions.chrome)</script>,
-            and Electron <script>document.write(process.versions.electron)</script>.
-            <button type="button" ng-click="sendEvent()"> Enviar </button>
+            <h1>RealTimePlot</h1><br>
+            <button type="button" ng-click="openSerial()">Ligar Serial</button>
+            <br><br>
+            <plotly plotly-data="data" plotly-layout="layout" plotly-options="options" plotly-events="plotlyEvents"></plotly>
+            <!-- {{ response }} -->
         </div>
     </body>
 
     <script> require('./renderer.js') </script>
     <!-- BOWER COMPONENTS -->
     <script src="bower_components/angular/angular.min.js"></script>
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="bower_components/socket.io/socket.io.js"></script>
     <script src="bower_components/angular-socket-io/socket.min.js"></script>
+    <script src="bower_components/plotly.js/dist/plotly.min.js"></script>
+    <script src="bower_components/angular-plotly/src/angular-plotly.js"></script>
 
     <!-- APP FILES -->
     <script src="app/app.js"></script>

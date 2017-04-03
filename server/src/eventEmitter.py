@@ -1,3 +1,7 @@
+import logging
+
+logger = logging.getLogger('EventEmitter')
+
 class EventEmitter(object):
     __instance = None
     eventDict = {}
@@ -9,16 +13,16 @@ class EventEmitter(object):
         return EventEmitter.__instance
 
     def on(self, eventName, func = None):
-        print('listener add on event: ' + eventName)
+        logger.debug('listener add on event: {}'.format(eventName))
 
         def _on(func):
             if (not self.eventDict.has_key(eventName)):
-                print('event not registred')
+                logger.debug('event not registred')
                 self.eventDict[eventName] = list()
 
 
             self.eventDict[eventName].append(func)
-            print('registered')
+            logger.debug('registered')
 
             return func
 
@@ -28,7 +32,7 @@ class EventEmitter(object):
             return _on
 
     def emit(self, eventName, data):
-        print('event emitted - ' + eventName)
+        logger.debug('event emitted - '.format(eventName))
 
         if (not self.eventDict.has_key(eventName)):
             return
