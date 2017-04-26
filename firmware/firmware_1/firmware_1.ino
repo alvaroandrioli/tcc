@@ -17,66 +17,81 @@ void setup() {
   
   randomSeed(analogRead(A1));
 
-  sensorQueue = xQueueCreate(5, sizeof(int));
-  serialQueue = xQueueCreate(5, sizeof(char));
-  
+  sensorQueue = xQueueCreate(5, sizeof(char *));
+//  serialQueue = xQueueCreate(5, sizeof(char));
+ 
   generateNumberTimer = xTimerCreate("generateNumberTimer", pdMS_TO_TICKS(30), pdTRUE, 0, generateNumber);
+ 
 
-  if (generateNumberTimer != NULL) {
+  if (generateNumberTimer == NULL) {
+    Serial.println("DEU PAU");
+  } else {
     generateNumberBase = xTimerStart(generateNumberTimer, 0);
 
     xTaskCreate(printNumber, "printNumber", 100, NULL, 1, NULL);
-    xTaskCreate(toggleLed, "toggleLed", 100, NULL, 1, NULL);
-
-    if (generateNumberBase == pdPASS) {
-      vTaskStartScheduler();
-    }
   }
+//
+//  if (generateNumberTimer != NULL) {
+//    generateNumberBase = xTimerStart(generateNumberTimer, 0);
+//
+//    xTaskCreate(printNumber, "printNumber", 100, NULL, 1, NULL);
+//    xTaskCreate(toggleLed, "toggleLed", 100, NULL, 1, NULL);
+//
+//    if (generateNumberBase == pdPASS) {
+//      vTaskStartScheduler();
+//    }
+//  }
 }
 
 void generateNumber(void *p) {
-    int num = random(10,20);
-    xQueueSendToFront(sensorQueue, &num, 1); 
+  char *res = (char *) malloc(sizeof(nome));
+    
+  sprintf(res, "%d,%d", random(0,1023),
+                              random(0,1023));
+  
+  xQueueSendToFront(sensorQueue, &res, 100); 
 }
 
 void printNumber(void *p) {
-  int rNum;
+  char *res;
   BaseType_t qStatus;
  
-  while (true) {
-    qStatus = xQueueReceive(sensorQueue, &rNum, 1);
+  while (1) {
+    qStatus = xQueueReceive(sensorQueue, &res, 100);
     if (qStatus == pdPASS) {
-      Serial.println(rNum);
+      Serial.println(res);
+      free(res);
     }
+   
   }
 }
-
-void toggleLed(void *p) {
-  char rData;
-  BaseType_t qStatus;
-  
-  while (true) {
-    qStatus = xQueueReceive(serialQueue, &rData, 1);
-    if (qStatus == pdPASS) {
-      switch (rData) {
-        case 'l':
-          digitalWrite(LED, 1);
-        break;
-        case 'd':
-          digitalWrite(LED, 0);
-        break;
-      }
-    }
-  }
-}
-
-void serialEvent() {
-  char readData;
-  if (Serial.available()) {
-    readData = Serial.read();
-    xQueueSendToFront(serialQueue, &readData, 1);
-  }
-}
+//
+//void toggleLed(void *p) {
+//  char rData;
+//  BaseType_t qStatus;
+//  
+//  while (true) {
+//    qStatus = xQueueReceive(serialQueue, &rData, 1);
+//    if (qStatus == pdPASS) {
+//      switch (rData) {
+//        case 'l':
+//          digitalWrite(LED, 1);
+//        break;
+//        case 'd':
+//          digitalWrite(LED, 0);
+//        break;
+//      }
+//    }
+//  }
+//}
+//
+//void serialEvent() {
+//  char readData;
+//  if (Serial.available()) {
+//    readData = Serial.read();
+//    xQueueSendToFront(serialQueue, &readData, 1);
+//  }
+//}
 
 void loop() {
   
