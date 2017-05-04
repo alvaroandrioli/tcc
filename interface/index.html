@@ -1,52 +1,32 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Photon</title>
-
+        <title>TCC - 1</title>
+        <meta name="viewport" content="width=device-width, initial-scale=0.5, maximum-scale=1, user-scalable=no">
         <!-- Stylesheets -->
+        <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="bower_components/photon/dist/css/photon.min.css">
-
-        <!-- Electron Javascript -->
-        <script src="app.js" charset="utf-8"></script>
     </head>
 
     <body ng-app="controlBenchApp">
-        <!-- Wrap your entire app inside .window -->
-        <div class="window" ng-controller="mainController">
-            <!-- .toolbar-header sits at the top of your app -->
-            <header class="toolbar toolbar-header">
-                <div class="toolbar-actions">
-                    <div class="btn-group pull-right">
 
-                        <button class="btn btn-default" ng-click="openSerial()">
-                            On
-                        </button>
-
-                        <button class="btn btn-default" ng-click="closeSerial()">
-                            Off
-                        </button>
-                    </div>
-                </div>
-            </header>
+        <div class="window">
 
             <div class="window-content"> <!-- WINDOWN-CONTENT -->
-                 <div class="pane-group"> <!-- PANEL-GROUP -->
-                    <div class="pane-lg sidebar">
-                        <h3>Alguma coisa</h3>
-                    </div>
+                <div class="pane-group">
+
+                    <side-bar></side-bar>
+
                     <div class="pane">
-                        <div class="padded-more">
-                            <h1 class="text-center">RealTimePlot</h1><br>
-                            <br>
-                            <div id="arfagemChart" style="height: 300px; width: 100%;"></div><br>
-                            <div id="guinadaChart" style="height: 300px; width: 100%;"></div>
-                        </div>
+
+                        <ui-view></ui-view>
+
                     </div>
-                </div> <!-- PANEL-GROUP -->
+                </div>
             </div> <!-- /WINDOWN-CONTENT -->
 
             <footer class="toolbar toolbar-footer">
-                <h1 class="title">Footer</h1>
+                <h1 class="title" style="padding: 5px;">IESB TCC 1</h1>
             </footer>
         </div>
     </body>
@@ -57,9 +37,22 @@
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="bower_components/socket.io/socket.io.js"></script>
     <script src="bower_components/angular-socket-io/socket.min.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
     <script src="app/resource/canvasjs.min.js"></script>
 
     <!-- APP FILES -->
     <script src="app/app.js"></script>
+    <script src="app/routes/routes.js"></script>
     <script src="app/resource/socket.factory.js"></script>
+    <script src="app/resource/serialPortService/serialPort.service.js"></script>
+    <script src="app/resource/switchService/switch.service.js"></script>
+
+    <!-- CONTROLLER -->
+    <script src="app/routes/main/main.controller.js"></script>
+    <script src="app/routes/information/information.controller.js"></script>
+    <script src="app/resource/sidebar/sidebar.controller.js"></script>
+
+    <!-- DIRECTIVES -->
+    <script src="app/resource/sidebar/sidebar.js"></script>
+
 </html>

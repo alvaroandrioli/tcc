@@ -1,0 +1,36 @@
+<div class="pane pane-sm sidebar" style="max-width: 175px !important">
+    <nav class="nav-group">
+        <h4 class="nav-group-title"  style="font-size: 15px !important">
+            <span class="icon icon-home"></span>
+            Bancada
+        </h4>
+        <span class="nav-group-item" ui-sref="visualizationGraphs" style="cursor:pointer;" ng-class="{'active': CURRENT_STATE === 'visualizationGraphs'}">
+            <span class="icon icon-home"></span>
+            Visualização
+        </span>
+
+        <span class="nav-group-item" ui-sref="information" style="cursor:pointer;" ng-class="{'active': CURRENT_STATE === 'information'}">
+            <span class="icon icon-info"></span>
+            Informação
+        </span>
+    </nav>
+
+    <nav class="nav-group">
+        <h4 class="nav-group-title" style="font-size: 15px !important">
+            <span class="icon icon-tools" ></span>
+            Controle
+        </h4>
+        <span class="nav-group-item">
+            <span class="icon icon-cog"></span>
+            PI
+        </span>
+        <span class="nav-group-item">
+            <span class="icon icon-cog"></span>
+            PID
+        </span>
+        <span class="nav-group-item">
+            <span class="icon icon-cog"></span>
+            Fuzzy
+        </span>
+    </nav>
+</div>

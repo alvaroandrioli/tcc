@@ -15,9 +15,7 @@ function createWindow () {
 
     // var subpy = require('child_process').spawn('python', ['../server/index.py']);
     // Create the browser window.
-    mainWindow = new BrowserWindow({useContentSize: true});
-
-    mainWindow.maximize();
+    mainWindow = new BrowserWindow({'width': 1365, 'height': 950, 'center': true, 'resizable': false});
 
     // and load the index.html of the app.
     mainWindow.loadURL(url.format({
