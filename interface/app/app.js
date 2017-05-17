@@ -1,4 +1,4 @@
-angular.module("controlBenchApp", ["btford.socket-io", "ui.router"])
+angular.module("controlBenchApp", ["btford.socket-io", "ui.router", "ui.bootstrap"])
     .run(function(serialPort) {
         serialPort.refresh();
     });

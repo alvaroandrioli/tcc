@@ -19,6 +19,7 @@
     "jquery": "^3.2.1",
     "photon": "^0.1.2-alpha",
     "angular-ui-router": "^0.4.2",
-    "bootstrap": "^3.3.7"
+    "bootstrap": "^3.3.7",
+    "angular-bootstrap": "^2.5.0"
   }
 }

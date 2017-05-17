@@ -1,43 +1,52 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>TCC - 1</title>
-        <meta name="viewport" content="width=device-width, initial-scale=0.5, maximum-scale=1, user-scalable=no">
-        <!-- Stylesheets -->
-        <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
-        <link rel="stylesheet" href="bower_components/photon/dist/css/photon.min.css">
-    </head>
+<html lang="pt-BR">
 
-    <body ng-app="controlBenchApp">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
 
-        <div class="window">
+    <title>TCC I - Bancada para testes de controle</title>
 
-            <div class="window-content"> <!-- WINDOWN-CONTENT -->
-                <div class="pane-group">
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
 
-                    <side-bar></side-bar>
+    <!-- Custom CSS -->
+    <link href="css/sidebar.css" rel="stylesheet">
 
-                    <div class="pane">
+</head>
 
-                        <ui-view></ui-view>
+<body ng-app="controlBenchApp">
 
-                    </div>
-                </div>
-            </div> <!-- /WINDOWN-CONTENT -->
+    <div id="wrapper" class="toggled">
 
-            <footer class="toolbar toolbar-footer">
-                <h1 class="title" style="padding: 5px;">IESB TCC 1</h1>
-            </footer>
+        <side-bar></side-bar>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+
+            <div class="container-fluid">
+
+                <ui-view></ui-view>
+
+            </div>
+
         </div>
-    </body>
+        <!-- /#page-content-wrapper -->
 
+    </div>
+    <!-- /#wrapper -->
+    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
     <script> require('./renderer.js') </script>
+
     <!-- BOWER COMPONENTS -->
-    <script src="bower_components/angular/angular.min.js"></script>
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/angular/angular.min.js"></script>
     <script src="bower_components/socket.io/socket.io.js"></script>
     <script src="bower_components/angular-socket-io/socket.min.js"></script>
     <script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
     <script src="app/resource/canvasjs.min.js"></script>
 
     <!-- APP FILES -->
@@ -54,5 +63,8 @@
 
     <!-- DIRECTIVES -->
     <script src="app/resource/sidebar/sidebar.js"></script>
+
+    <script>if (window.module) module = window.module;</script>
+</body>
 
 </html>

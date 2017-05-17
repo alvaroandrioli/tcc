@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>TCC - 1</title>
+        <meta name="viewport" content="width=device-width, initial-scale=0.5, maximum-scale=1, user-scalable=no">
+        <!-- Stylesheets -->
+        <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="bower_components/photon/dist/css/photon.min.css">
+    </head>
+
+    <body ng-app="controlBenchApp">
+
+        <div class="window">
+
+            <div class="window-content"> <!-- WINDOWN-CONTENT -->
+                <div class="pane-group">
+
+                    <side-bar></side-bar>
+
+                    <div class="pane">
+
+                        <ui-view></ui-view>
+
+                    </div>
+                </div>
+            </div> <!-- /WINDOWN-CONTENT -->
+            
+        </div>
+    </body>
+
+    <script> require('./renderer.js') </script>
+    <!-- BOWER COMPONENTS -->
+    <script src="bower_components/angular/angular.min.js"></script>
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/socket.io/socket.io.js"></script>
+    <script src="bower_components/angular-socket-io/socket.min.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script src="app/resource/canvasjs.min.js"></script>
+
+    <!-- APP FILES -->
+    <script src="app/app.js"></script>
+    <script src="app/routes/routes.js"></script>
+    <script src="app/resource/socket.factory.js"></script>
+    <script src="app/resource/serialPortService/serialPort.service.js"></script>
+    <script src="app/resource/switchService/switch.service.js"></script>
+
+    <!-- CONTROLLER -->
+    <script src="app/routes/main/main.controller.js"></script>
+    <script src="app/routes/information/information.controller.js"></script>
+    <script src="app/resource/sidebar/sidebar.controller.js"></script>
+
+    <!-- DIRECTIVES -->
+    <script src="app/resource/sidebar/sidebar.js"></script>
+
+</html>
