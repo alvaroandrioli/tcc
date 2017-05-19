@@ -3,6 +3,7 @@ import serial
 import logging
 from time import sleep
 from threading import Lock
+from threading import Timer
 
 from eventEmitter import EventEmitter
 from stateConstants import StateConstants
@@ -10,7 +11,7 @@ from stateConstants import StateConstants
 logger = logging.getLogger('handleSocketDataInit')
 
 serialPort = None
-serialMutex = Lock()
+serialMutex = None
 
 ee = EventEmitter()
 
@@ -46,6 +47,8 @@ def openSerial():
 def readSerial():
     global serialPort
     global serialMutex
+    
+    serialMutex = Lock()
     sc = StateConstants()
     
     openSerial()
@@ -57,25 +60,45 @@ def readSerial():
         if (serialPort.in_waiting):
             
             serialMutex.acquire()
-            
             readData = serialPort.readline()
+            serialMutex.release()
+            
             ee.emit("SERIAL.READ_DATA", readData)
             
             if not sc.getConstant('SERIAL.OPEN'):
                 break
             
-            serialMutex.release()
- 
-    logger.info("SERIAL STOPED")
-    serialPort.close()
+            
     
+    logger.info("SERIAL STOPED")
+    serialMutex = None
+    serialPort.close()
+
+def checkWorkbench():
+    sc = StateConstants()
+    Timer(3, checkWorkbench).start()
+    serialPort = None
+    
+    ports = list(list_ports.comports())
+
+    for port in ports:
+        if (port.manufacturer.lower().find("arduino") > -1):
+            serialPort = port;
+            break;
+        
+    sc.setConstant("SERIAL.CONNECTED", bool(serialPort))
+    ee.emit("SERIAL.REFRESH.VALIDATE", bool(serialPort))
+
+
 @ee.on("SERIAL.WRITE_DATA")
 def printSerial(data):
     global serialPort
     global serialMutex
     
     serialMutex.acquire()
-    logger.debug("printSerial - {}".format(data))
+    logger.info("printSerial - {}".format(data))
     serialPort.write(str(data))
     serialMutex.release()
+
+checkWorkbench()
         

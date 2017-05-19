@@ -3,7 +3,7 @@
 
 #define LED 13
 #define PIN_ARFAGEM 9
-#define PIN_ROLAGEM 10
+#define PIN_ROLAGEM 11
 #define ARFAGEM_SP A0
 #define ROLAGEM_SP A1
 #define ARFAGEM_SENSOR A2
@@ -27,8 +27,8 @@ void setup() {
 void readSensor() {
   int arfagem_sp = analogRead(ARFAGEM_SP);
   int rolagem_sp = analogRead(ROLAGEM_SP);
-  int arfagem_sensor = analogRead(ARFAGEM_SENSOR);
-  int rolagem_sensor = analogRead(ROLAGEM_SENSOR);
+  int arfagem_sensor = 0;
+  int rolagem_sensor = 0;
 
   String serialValue = String(arfagem_sp);
   serialValue.concat(',');
@@ -41,7 +41,7 @@ void readSensor() {
   Serial.println(serialValue);
 }
 
-void serialEvent() {
+void loop() {
   if (Serial.available()) {
     String serialRead = Serial.readString();
 
@@ -51,8 +51,4 @@ void serialEvent() {
     arfagem.write(map(arfagemS, 0, 1023, 0, 180));
     rolagem.write(map(rolagemS, 0, 1023, 0, 180));
   }
-}
-
-void loop() {
-  
 }

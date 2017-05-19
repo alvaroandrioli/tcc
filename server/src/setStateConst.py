@@ -8,3 +8,4 @@ from stateConstants import StateConstants
 const = StateConstants()
 
 const.setConstant('SERIAL.OPEN', False)
+const.setConstant("SERIAL.CONNECTED", False)

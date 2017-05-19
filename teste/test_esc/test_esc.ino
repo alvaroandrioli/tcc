@@ -3,7 +3,8 @@
 
 #include <Servo.h>
 
-Servo ServoMotor;
+Servo esc1;
+Servo esc2;
 
 //Pino do potenciometro
 int pino_pot = A5;
@@ -14,7 +15,8 @@ int valor;
 void setup()
 {
   Serial.begin(9600);
-  ServoMotor.attach(pino_motor);
+  esc1.attach(pino_motor);
+  esc2.attach(pino_motor + 1);
   Serial.println("Aguardando 5 segundos....");
   delay(5000);
 }
@@ -29,5 +31,6 @@ void loop()
   Serial.print("Potenciometro: ");
   Serial.println(valor);
   //Envia o valor para o motor
-  ServoMotor.write(valor);
+  esc1.write(valor);
+  esc2.write(valor);
 }
