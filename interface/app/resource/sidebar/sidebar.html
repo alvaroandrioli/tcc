@@ -23,7 +23,10 @@
             </li>
             <li>
                 <a href="#" data-toggle="collapse" data-target="#controle">Controle <span class="glyphicon glyphicon-cog"></span> <span class="glyphicon glyphicon-menu-down"></span></a>
-                <ul id="controle" class="collapse">
+                <ul id="controle" class="collapse" ng-class="{'in': CURRENT_STATE === 'propotionalController'}">
+                    <li>
+                        <a href="#" ui-sref="propotionalController" ng-class="{'nav-active': CURRENT_STATE === 'propotionalController'}">Proporcional</a>
+                    </li>
                     <li>
                         <a href="#">PI</a>
                     </li>

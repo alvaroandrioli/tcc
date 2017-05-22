@@ -1,0 +1,61 @@
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="text-center">Controle proporcional</h1><br>
+    </div>
+</div>
+<br>
+
+<div class="row">
+    <div class="col-lg-12">
+        <h2 class="text-center">Arfagem</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-3 col-lg-offset-4">
+        <img class="img-responsive" src="http://fpoimg.com/300x200">
+    </div>
+    <div class="col-lg-1">
+        <div class="form-group">
+            <label for="exampleInputEmail1">Ganho</label>
+            <input ng-model="pitchGain" type="number" maxlength="4" class="form-control" placeholder="1.0">
+            <small ng-if="pitchGain || pitchGain == 0" class="form-text text-muted">Valor obrigatório</small>
+        </div>
+    </div>
+</div>
+<br>
+
+<div class="row">
+    <div class="col-lg-12">
+        <h2 class="text-center">Guinada</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-3 col-lg-offset-4">
+        <img class="img-responsive" src="http://fpoimg.com/300x200">
+    </div>
+    <div class="col-lg-1">
+        <div class="form-group">
+            <label for="exampleInputEmail1">Ganho</label>
+            <input ng-model="yamGain" type="number" maxlength="4" class="form-control" placeholder="1.0">
+            <small ng-if="yamGain || yamGain == 0" class="form-text text-muted">Valor obrigatório</small>
+        </div>
+    </div>
+</div>
+<br>
+<br>
+<br>
+
+<div class="row">
+    <div class="col-lg-12">
+        <button class="btn btn-primary pull-right" ng-disabled="isLoading" ng-click="send()">Confirmar
+            <div class="la-cog button-icon" ng-if="isLoading">
+            	<div></div>
+            </div>
+        </button>
+    </div>
+</div>
+<br>
+
+<alert-component></alert-component>

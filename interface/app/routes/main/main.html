@@ -7,14 +7,16 @@
 
 <div class="row">
     <div class="col-lg-2 col-lg-offset-10">
-        <p class="text-center" ng-if="!serialPortConnected()" style="border: 1px solid #c2c0c2; background: #e8e6e8; border-radius: 4px; padding: 5px; box-shadow: inset 0 1px 0 #f5f4f5;">Bancada não encontrada</p>
+        <div class="alert alert-warning text-center" ng-if="!serialPortConnected()">
+            <strong>Aviso!</strong> Bancada não conectada
+        </div>
     </div>
 </div>
 <br>
 
 <div class="row">
     <div class="col-lg-3">
-        <img class="img-responsive" src="http://lorempixel.com/300/200">
+        <img class="img-responsive" src="http://fpoimg.com/300x200">
     </div>
     <div class="col-lg-9">
         <div id="arfagemChart" style="height: 200px; width: 100%;"></div>
@@ -24,7 +26,7 @@
 
 <div class="row">
     <div class="col-lg-3">
-        <img class="img-responsive" src="http://lorempixel.com/300/200">
+        <img class="img-responsive" src="http://fpoimg.com/300x200">
     </div>
     <div class="col-lg-9">
         <div id="guinadaChart" style="height: 200px; width: 100%;"></div>
@@ -36,14 +38,14 @@
     <div class="col-lg-12">
         <div class="pull-right">
             <div class="btn-group">
-                <button class="btn btn-lg btn-success" ng-disabled="!serialPortConnected() || getState()" ng-click="openSerial()">
+                <button class="btn btn-success" ng-disabled="!serialPortConnected() || getState()" ng-click="openSerial()">
                     Ligar
                 </button>
-                <button class="btn btn-lg btn-danger" ng-disabled="!serialPortConnected() || !getState()" ng-click="closeSerial()">
+                <button class="btn btn-danger" ng-disabled="!serialPortConnected() || !getState()" ng-click="closeSerial()">
                     Desligar
                 </button>
             </div>&nbsp;
-            <button class="btn btn-lg btn-default" ng-disable="getState()" ng-click="clearGraphs()">
+            <button class="btn btn-default" ng-disable="getState()" ng-click="clearGraphs()">
                 Limpar
             </button>
         </div>
@@ -53,6 +55,6 @@
 <br>
 <div class="row">
     <div class="col-lg-offset-4 col-lg-4">
-    <img class="img-responsive" src="http://lorempixel.com/400/300">
+    <img class="img-responsive" src="http://fpoimg.com/400x300">
     </div>
 </div>

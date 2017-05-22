@@ -10,9 +10,14 @@ angular.module("controlBenchApp")
             url: "/information",
             controller: "informationController",
             templateUrl: "app/routes/information/information.html"
+        })
+        .state("propotionalController", {
+            url: "/propotional",
+            controller: "propotionalController",
+            templateUrl: "app/routes/propotionalController/propotional.html"
         });
     })
-    .run(function($state, $rootScope) {
+    .run(function($state, $rootScope, Alert) {
         $state.go("visualizationGraphs");
 
         $rootScope.CURRENT_STATE = "visualizationGraphs";
@@ -20,5 +25,6 @@ angular.module("controlBenchApp")
         $rootScope.$on('$stateChangeStart', function(event, toState){
             $rootScope.CURRENT_STATE = toState.name;
             console.log($rootScope.CURRENT_STATE);
+            Alert.clearAll();
         });
     });

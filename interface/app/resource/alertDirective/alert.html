@@ -1,0 +1,9 @@
+
+<div class="row" ng-repeat="alert in alerts">
+    <div class="col-lg-4 col-lg-offset-4">
+        <div class="alert" ng-class="'alert-' + alert.type">
+            <button type="button" class="close" data-dismiss="alert" ng-click="closeAlert($index)">×</button>
+            <p><strong>{{ alert.title }}</strong>&nbsp;{{ alert.msg }}</p>
+        </div>
+    </div>
+</div>

@@ -41,15 +41,25 @@ def handleSocketDataInit(socketio):
         vparams = params.split(',')
         identification = vparams[0]
         
-        hController.setPitchController(identification)
-        hController.setPitchParams(vparams[1:])
+        try:
+            hController.setPitchController(identification)
+            hController.setPitchParams(vparams[1:])
+            socketio.emit("CONTROL.SET.PITCH.RES", 1)
+        except:
+            socketio.emit("CONTROL.SET.PITCH.RES", 0)
+
     
     @socketio.on("CONTROL.SET.YAM")
     def setYamController(params):
         vparams = params.split(',')
         identification = vparams[0]
         
-        hController.setYamController(identification)
-        hController.setYamParams(vparams[1:])
+        try:
+            hController.setYamController(identification)
+            hController.setYamParams(vparams[1:])
+            socketio.emit("CONTROL.SET.YAM.RES", 1)
+        except:
+            socketio.emit("CONTROL.SET.YAM.RES", 0)
+            
     
         

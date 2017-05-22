@@ -10,8 +10,10 @@
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="bower_components/bootswatch-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bower_components/load-awesome/css/cog.min.css">
 
     <!-- Custom CSS -->
+    <link href="css/main.css" rel="stylesheet">
     <link href="css/sidebar.css" rel="stylesheet">
 
 </head>
@@ -52,17 +54,21 @@
     <!-- APP FILES -->
     <script src="app/app.js"></script>
     <script src="app/routes/routes.js"></script>
-    <script src="app/resource/socket.factory.js"></script>
+    <script src="app/resource/socketService/socket.service.js"></script>
     <script src="app/resource/serialPortService/serialPort.service.js"></script>
     <script src="app/resource/switchService/switch.service.js"></script>
+    <script src="app/resource/alertService/alert.service.js"></script>
 
     <!-- CONTROLLER -->
     <script src="app/routes/main/main.controller.js"></script>
     <script src="app/routes/information/information.controller.js"></script>
+    <script src="app/routes/propotionalController/propotional.controller.js"></script>
     <script src="app/resource/sidebar/sidebar.controller.js"></script>
+    <script src="app/resource/alertDirective/alert.controller.js"></script>
 
     <!-- DIRECTIVES -->
     <script src="app/resource/sidebar/sidebar.js"></script>
+    <script src="app/resource/alertDirective/alert.js"></script>
 
     <script>if (window.module) module = window.module;</script>
 </body>
