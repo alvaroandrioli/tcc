@@ -1,5 +1,5 @@
 angular.module("controlBenchApp")
-    .controller("mainController", function($scope, $http, socket, serialPort, switchService) {
+    .controller("mainController", function($scope, $http, socket, serialPort, switchService, $uibModal) {
         $scope.dataArfagem = [{
             type: "spline",
             showInLegend: true,
@@ -63,6 +63,23 @@ angular.module("controlBenchApp")
             },
             data: $scope.dataGuinada
         });
+
+        $scope.openLoadingModal = function() {
+            console.log("aqui");
+            $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'Loading',
+                templateUrl: 'app/routes/main/modal/loading.modal.html',
+                backdrop: 'static',
+                keyboard: false,
+                controller: function($uibModalInstance, socket) {
+                    socket.on("SERIAL.BEGIN.RES", function() {
+                        $uibModalInstance.close();
+                    });
+                },
+                size: 'sm'
+            });
+        }
 
 
         socket.on("SERIAL.EMIT_DATA", function(data) {

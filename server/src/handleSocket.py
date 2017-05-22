@@ -10,6 +10,7 @@ from src.serialData import readSerial
 from src.eventEmitter import EventEmitter
 from src.stateConstants import StateConstants
 from src.control import HandleController
+from time import sleep
 
 logger = logging.getLogger("handleSocketDataInit")
 hController = HandleController()
@@ -23,6 +24,8 @@ def handleSocketDataInit(socketio):
         sc.setConstant('SERIAL.OPEN', True)
         logger.info("SOCKET EVENT SERIAL.BEGIN received")
         Thread(target=readSerial).start()
+        sleep(2)
+        socketio.emit("SERIAL.BEGIN.RES")
         
     @socketio.on("SERIAL.END")
     def readSerialStop():

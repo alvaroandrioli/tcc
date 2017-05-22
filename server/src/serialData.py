@@ -52,7 +52,7 @@ def readSerial():
     sc = StateConstants()
     
     openSerial()
-    sleep(3) #tempo para a porta serial ligar
+    sleep(2) #tempo para a porta serial ligar
     logger.debug(serialPort.read_all())
     
     while (True):
