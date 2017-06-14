@@ -1,9 +1,8 @@
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="text-center">Controle proporcional</h1><br>
+        <h1 class="text-center">Controle Personalizado</h1><br>
     </div>
 </div>
-<br>
 
 <div class="row">
     <div class="col-lg-12">
@@ -12,15 +11,11 @@
 </div>
 
 <div class="row">
-    <div class="col-lg-3 col-lg-offset-3">
+    <div class="col-lg-4">
         <img class="img-responsive" src="http://fpoimg.com/300x200">
     </div>
-    <div class="col-lg-3">
-        <div class="form-group">
-            <label for="exampleInputEmail1">Ganho</label>
-            <input ng-model="pitchGain" type="number" maxlength="4" class="form-control" placeholder="1.0">
-            <small ng-if="!pitchGain || pitchGain == 0" class="form-text text-muted">Valor obrigatório</small>
-        </div>
+    <div class="col-lg-8">
+        <ui-codemirror ng-model="pitchCode" style="height: 200px !important;" ui-codemirror-opts="editorOptions"></ui-codemirror>
     </div>
 </div>
 <br>
@@ -32,19 +27,13 @@
 </div>
 
 <div class="row">
-    <div class="col-lg-3 col-lg-offset-3">
+    <div class="col-lg-4">
         <img class="img-responsive" src="http://fpoimg.com/300x200">
     </div>
-    <div class="col-lg-3">
-        <div class="form-group">
-            <label for="exampleInputEmail1">Ganho</label>
-            <input ng-model="yamGain" type="number" maxlength="4" class="form-control" placeholder="1.0">
-            <small ng-if="!yamGain || yamGain == 0" class="form-text text-muted">Valor obrigatório</small>
-        </div>
+    <div class="col-lg-8">
+        <ui-codemirror ng-model="travelCode" ui-codemirror-opts="editorOptions"></ui-codemirror>
     </div>
 </div>
-<br>
-<br>
 <br>
 
 <div class="row">

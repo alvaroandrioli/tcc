@@ -4,10 +4,17 @@ from abc import ABCMeta, abstractmethod
 logger = logging.getLogger("HandleController")
 
 class HandleController(object):
+    __instance = None
     __pitchControl = None
     __yamControl = None
     __controllerFunctions = [];
     
+    def __new__(cls):
+        if HandleController.__instance is None:
+            HandleController.__instance = object.__new__(cls)
+            
+        return HandleController.__instance
+
     def setPitchController(self, identification):
         for control in self.__controllerFunctions:
             if (control.testController(identification)):
@@ -32,12 +39,12 @@ class HandleController(object):
     
     def executePitch(self, error):
         res = self.__pitchControl.execute(error)
-        logger.debug("executePitch: error-{} controlSignal={}".format(error, res))
+        logger.debug("executePitch: error={} controlSignal={}".format(error, res))
         return self.__pitchControl.execute(error);
    
     def executeYam(self, error):
         res = self.__yamControl.execute(error)
-        logger.debug("executeYam: error-{} controlSignal={}".format(error, res))
+        logger.debug("executeYam: error={} controlSignal={}".format(error, res))
         return res
     
     def addControllerFunction(self, controllerFunction):

@@ -4,3 +4,7 @@
     width: 20px;
     margin-left: 20px;
 }
+
+.CodeMirror {
+    height: 200px !important;
+}

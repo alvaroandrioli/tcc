@@ -11,6 +11,11 @@ angular.module("controlBenchApp")
             controller: "informationController",
             templateUrl: "app/routes/information/information.html"
         })
+        .state("customController", {
+            url: "/customController",
+            controller: "customController",
+            templateUrl: "app/routes/customController/custom.html"
+        })
         .state("propotionalController", {
             url: "/propotional",
             controller: "propotionalController",

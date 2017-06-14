@@ -5,11 +5,11 @@ angular.module("controlBenchApp")
         $scope.isLoading = false;
 
         $scope.send = function() {
-            if (($scope.yamGain || $scope.yamGain < 0) || ($scope.pitchGain || $scope.pitchGain < 0)) {
+            if ((!$scope.yamGain || $scope.yamGain < 0) || (!$scope.pitchGain || $scope.pitchGain < 0)) {
                 Alert.danger("Erro!", "Ganho deve ser maior que 0");
             } else {
-                socket.emit("CONTROL.SET.PITCH", String($scope.pitchGain));
-                socket.emit("CONTROL.SET.YAM", String($scope.yamGain));
+                socket.emit("CONTROL.SET.PITCH", "propotional,"+String($scope.pitchGain));
+                socket.emit("CONTROL.SET.YAM", "propotional,"+String($scope.yamGain));
                 $scope.isLoading = true;
             }
         }
@@ -19,6 +19,8 @@ angular.module("controlBenchApp")
                 $scope.pitchRes = true;
             else
                 $scope.pitchRes = false;
+
+            Alert.success("Atenção!", "Controle de arfagem configurado com sucesso");
         });
 
         socket.on("CONTROL.SET.YAM.RES", function(res) {
@@ -28,6 +30,8 @@ angular.module("controlBenchApp")
                 $scope.yamRes = true;
 
             $scope.isLoading = false;
+
+            Alert.success("Atenção!", "Controle de translação configurado com sucesso");
         });
 
     });

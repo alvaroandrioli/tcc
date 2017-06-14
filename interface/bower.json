@@ -22,6 +22,7 @@
     "bootstrap": "^3.3.7",
     "angular-bootstrap": "^2.5.0",
     "bootswatch-dist": "cosmo",
-    "load-awesome": "^1.1.0"
+    "load-awesome": "^1.1.0",
+    "angular-ui-codemirror": "^0.3.0"
   }
 }

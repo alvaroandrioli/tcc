@@ -12,7 +12,7 @@ angular.module("controlBenchApp")
             dataPoints: [{x:0, y:0},{x:1, y:0},{x:2, y:0},{x:3, y:0},{x:4, y:0},{x:5, y:0},{x:6, y:0},{x:7, y:0},{x:8, y:0},{x:9, y:0}]
         }];
 
-        $scope.dataGuinada = [{
+        $scope.dataTranslacao = [{
             type: "spline",
             showInLegend: true,
             name: 'Referencia',
@@ -44,9 +44,9 @@ angular.module("controlBenchApp")
             data: $scope.dataArfagem
         });
 
-        var guinadaChart = new CanvasJS.Chart("guinadaChart", {
+        var translacaoChart = new CanvasJS.Chart("translacaoChart", {
             title: {
-                text: "Guinada"
+                text: "Translação"
             },
             legend: {
                 horizontalAlign: "right", // left, center ,right
@@ -61,10 +61,10 @@ angular.module("controlBenchApp")
                     return  "";
                 }
             },
-            data: $scope.dataGuinada
+            data: $scope.dataTranslacao
         });
 
-        $scope.openLoadingModal = function() {
+        var openLoadingModal = function() {
             console.log("aqui");
             $uibModal.open({
                 animation: true,
@@ -81,6 +81,25 @@ angular.module("controlBenchApp")
             });
         }
 
+        $scope.openCamModal = function() {
+            $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'Cam',
+                templateUrl: 'app/routes/main/modal/cam.modal.html',
+                backdrop: false,
+                keyboard: true,
+                windowTopClass: "dragModal",
+                controller: function($uibModalInstance, $scope) {
+                    setTimeout(function () {
+                        $(".modal-dialog").draggable();
+                    }, 100);
+                    $scope.close = function() {
+                        $uibModalInstance.close();
+                    }
+                },
+                size: 'sm'
+            });
+        }
 
         socket.on("SERIAL.EMIT_DATA", function(data) {
             // $scope.response = data;
@@ -92,18 +111,19 @@ angular.module("controlBenchApp")
                     $scope.dataArfagem[dataI].dataPoints = shifit($scope.dataArfagem[dataI].dataPoints);
                     $scope.dataArfagem[dataI].dataPoints.push({'x': 9, 'y': data});
                 } else {
-                    $scope.dataGuinada[dataI - 2].dataPoints = shifit($scope.dataGuinada[dataI - 2].dataPoints);
-                    $scope.dataGuinada[dataI - 2].dataPoints.push({'x': 9, 'y': data});
+                    $scope.dataTranslacao[dataI - 2].dataPoints = shifit($scope.dataTranslacao[dataI - 2].dataPoints);
+                    $scope.dataTranslacao[dataI - 2].dataPoints.push({'x': 9, 'y': data});
                 }
             }
 
             arfagemChart.render();
-            guinadaChart.render();
+            translacaoChart.render();
         });
 
         $scope.openSerial = function() {
             switchService.setState(true);
             socket.emit("SERIAL.BEGIN");
+            openLoadingModal();
         };
 
         $scope.closeSerial = function() {
@@ -115,11 +135,11 @@ angular.module("controlBenchApp")
             $scope.dataArfagem[0].dataPoints = [{x:0, y:0},{x:1, y:0},{x:2, y:0},{x:3, y:0},{x:4, y:0},{x:5, y:0},{x:6, y:0},{x:7, y:0},{x:8, y:0},{x:9, y:0}];
             $scope.dataArfagem[1].dataPoints = [{x:0, y:0},{x:1, y:0},{x:2, y:0},{x:3, y:0},{x:4, y:0},{x:5, y:0},{x:6, y:0},{x:7, y:0},{x:8, y:0},{x:9, y:0}];
 
-            $scope.dataGuinada[0].dataPoints = [{x:0, y:0},{x:1, y:0},{x:2, y:0},{x:3, y:0},{x:4, y:0},{x:5, y:0},{x:6, y:0},{x:7, y:0},{x:8, y:0},{x:9, y:0}];
-            $scope.dataGuinada[1].dataPoints = [{x:0, y:0},{x:1, y:0},{x:2, y:0},{x:3, y:0},{x:4, y:0},{x:5, y:0},{x:6, y:0},{x:7, y:0},{x:8, y:0},{x:9, y:0}];
+            $scope.dataTranslacao[0].dataPoints = [{x:0, y:0},{x:1, y:0},{x:2, y:0},{x:3, y:0},{x:4, y:0},{x:5, y:0},{x:6, y:0},{x:7, y:0},{x:8, y:0},{x:9, y:0}];
+            $scope.dataTranslacao[1].dataPoints = [{x:0, y:0},{x:1, y:0},{x:2, y:0},{x:3, y:0},{x:4, y:0},{x:5, y:0},{x:6, y:0},{x:7, y:0},{x:8, y:0},{x:9, y:0}];
 
             arfagemChart.render();
-            guinadaChart.render();
+            translacaoChart.render();
         }
 
         $scope.serialPortConnected = function() {
@@ -142,7 +162,6 @@ angular.module("controlBenchApp")
             return res;
         }
 
-
         arfagemChart.render();
-        guinadaChart.render();
+        translacaoChart.render();
     });

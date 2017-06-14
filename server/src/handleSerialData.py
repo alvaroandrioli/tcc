@@ -10,6 +10,7 @@ from src.control import HandleController
 logger = logging.getLogger("handleSerialDataInit")
 
 def handleSerialDataInit(socketio):
+    hController = HandleController()
     
     ee = EventEmitter()
     
@@ -28,8 +29,8 @@ def handleSerialDataInit(socketio):
             
             logger.debug("SOCKET EVENT - SERIAL.EMIT_DATA - emit {}".format(data))
             
-            arfagemC = int((180/1023.) * HandleController.executePitch(arfagemE))
-            guinadaC = int((180/1023.) * HandleController.executeYam(guinadaE))  
+            arfagemC = int((180/1023.) * hController.executePitch(arfagemE))
+            guinadaC = int((180/1023.) * hController.executeYam(guinadaE))  
             
             controlBuffer = '{},{}\n'.format(arfagemC, guinadaC)
             

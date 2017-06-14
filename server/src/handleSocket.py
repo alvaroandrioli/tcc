@@ -13,9 +13,10 @@ from src.control import HandleController
 from time import sleep
 
 logger = logging.getLogger("handleSocketDataInit")
-hController = HandleController()
+
 
 def handleSocketDataInit(socketio):
+    hController = HandleController()
     ee = EventEmitter()
        
     @socketio.on("SERIAL.BEGIN")

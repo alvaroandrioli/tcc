@@ -6,8 +6,13 @@
 <br>
 
 <div class="row">
-    <div class="col-lg-2 col-lg-offset-10">
-        <div class="alert alert-warning text-center" ng-if="!serialPortConnected()">
+    <div class="col-lg-2">
+        <div class="alert alert-info text-center" ng-if="true">
+            <strong>Controle</strong> Não selecionado
+        </div>
+    </div>
+    <div class="col-lg-2 col-lg-offset-8">
+        <div class="alert alert-warning text-center" ng-if="true">
             <strong>Aviso!</strong> Bancada não conectada
         </div>
     </div>
@@ -29,7 +34,7 @@
         <img class="img-responsive" src="http://fpoimg.com/300x200">
     </div>
     <div class="col-lg-9">
-        <div id="guinadaChart" style="height: 200px; width: 100%;"></div>
+        <div id="translacaoChart" style="height: 200px; width: 100%;"></div>
     </div>
 </div>
 <br>
@@ -37,6 +42,9 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="pull-right">
+            <button class="btn btn-primary" ng-click="openCamModal()">
+                Câmera
+            </button>
             <div class="btn-group">
                 <button class="btn btn-success" ng-disabled="!serialPortConnected() || getState()" ng-click="openSerial()">
                     Ligar
@@ -51,12 +59,3 @@
         </div>
     </div>
 </div>
-
-<br>
-<div class="row">
-    <div class="col-lg-offset-4 col-lg-4">
-    <img class="img-responsive" src="http://fpoimg.com/400x300">
-    </div>
-</div>
-
-<button ng-click="openLoadingModal()">Abrir</button>
