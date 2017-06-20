@@ -30,21 +30,21 @@ class HandleController(object):
                 break
         
     def setPitchParams(self, params):
-        logger.info("setPitchParams: {}".format(params))
+        logger.error("setPitchParams: {}".format(params))
         self.__pitchControl.setParams(params)
     
     def setYamParams(self, params):
-        logger.info("setYamParams: {}".format(params))
+        logger.error("setYamParams: {}".format(params))
         self.__yamControl.setParams(params)
     
     def executePitch(self, error):
         res = self.__pitchControl.execute(error)
-        logger.debug("executePitch: error={} controlSignal={}".format(error, res))
-        return self.__pitchControl.execute(error);
+        logger.error("executePitch: error={} controlSignal={}".format(error, res))
+        return res;
    
     def executeYam(self, error):
         res = self.__yamControl.execute(error)
-        logger.debug("executeYam: error={} controlSignal={}".format(error, res))
+        logger.error("executeYam: error={} controlSignal={}".format(error, res))
         return res
     
     def addControllerFunction(self, controllerFunction):

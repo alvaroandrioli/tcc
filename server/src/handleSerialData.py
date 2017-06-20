@@ -18,7 +18,7 @@ def handleSerialDataInit(socketio):
     def serialReadData(data):
         logger.debug("serialReadData received data - {}".format(data))
         if (len(data) >= 7):
-            arfagemSp, guinadaSp, arfagemS, guinadaS = data.split(",")
+            arfagemSp, arfagemS, guinadaSp, guinadaS = data.split(",")
             arfagemSp = int(arfagemSp)
             guinadaSp = int(guinadaSp)
             arfagemS = int(arfagemS)
@@ -29,8 +29,8 @@ def handleSerialDataInit(socketio):
             
             logger.debug("SOCKET EVENT - SERIAL.EMIT_DATA - emit {}".format(data))
             
-            arfagemC = int((180/1023.) * hController.executePitch(arfagemE))
-            guinadaC = int((180/1023.) * hController.executeYam(guinadaE))  
+            arfagemC = normalize(hController.executePitch(arfagemE))
+            guinadaC = normalize(hController.executeYam(guinadaE))
             
             controlBuffer = '{},{}\n'.format(arfagemC, guinadaC)
             
@@ -42,5 +42,13 @@ def handleSerialDataInit(socketio):
     @ee.on("SERIAL.REFRESH.VALIDATE")
     def sendValidateWorkbench(value):
         socketio.emit("SERIAL.REFRESH.RECEIVE", value)
+    
+    def normalize(value):
+        value = int(value)
+        if value > 1023:
+            value = 1023
+        elif value < 0:
+            value = 0
         
+        return value
         

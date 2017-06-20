@@ -1,8 +1,11 @@
 #include <MsTimer2.h>
 #include <Servo.h>
 
-#define ARFAGEM_PIN 10
+#define ARFAGEM_PIN 6
 #define GUINADA_PIN 11
+#define ARFAGEM_SP A1
+#define GUINADA_SP A0
+
 Servo guinada;
 Servo arfagem;
 int arfagemC = 0;
@@ -10,24 +13,24 @@ int guinadaC = 0;
 boolean shut = false;
 
 void setup() {
-  MsTimer2::set(20, readSensor); //10 mili segundos
+  MsTimer2::set(40, readSensor); //20 mili segundos
   MsTimer2::start();
    
   arfagem.attach(ARFAGEM_PIN);
   guinada.attach(GUINADA_PIN);
+      
+  arfagem.write(40);
+  guinada.write(40);
 
-//  pinMode(ARFAGEM_LED, OUTPUT);
-//  pinMode(GUINADA_LED, OUTPUT);
-
-//  analogWrite(ARFAGEM_LED, 0);
-//  analogWrite(GUINADA_LED, 0);
+  delay(1000);
   
   Serial.begin(115200);
 }
 
 void readSensor() {
-  int arfagem_sp = analogRead(A5);
-  int guinada_sp = arfagem_sp;
+  int arfagem_sp = analogRead(ARFAGEM_SP);
+  int guinada_sp = analogRead(GUINADA_SP);
+
   int arfagem_sensor = 0;
   int guinada_sensor = 0;
 
@@ -81,8 +84,8 @@ void loop() {
     delayMicroseconds(100);
   }
 
-  arfagem.write(arfagemC);
-  guinada.write(guinadaC);
+  arfagem.write(map(arfagemC, 0, 1023, 40, 140));
+  guinada.write(map(guinadaC, 0, 1023, 40, 140));
 }
 
 void clearBuffer(char *vet) {

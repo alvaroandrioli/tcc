@@ -7,12 +7,12 @@
 
 <div class="row">
     <div class="col-lg-2">
-        <div class="alert alert-info text-center" ng-if="true">
+        <div class="alert alert-info text-center" ng-if="false">
             <strong>Controle</strong> Não selecionado
         </div>
     </div>
     <div class="col-lg-2 col-lg-offset-8">
-        <div class="alert alert-warning text-center" ng-if="true">
+        <div class="alert alert-warning text-center" ng-if="!serialPortConnected()">
             <strong>Aviso!</strong> Bancada não conectada
         </div>
     </div>
