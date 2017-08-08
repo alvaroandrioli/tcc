@@ -7,8 +7,11 @@
 
 <div class="row">
     <div class="col-lg-2">
-        <div class="alert alert-info text-center" ng-if="false">
-            <strong>Controle</strong> Não selecionado
+        <div class="alert alert-info text-center" ng-if="!isSetController()">
+            <p><strong>Controle</strong> Não selecionado</p>
+        </div>
+        <div class="alert alert-info text-center" ng-if="isSetController()">
+            <p><strong>Controle</strong> {{ TRANSFORM_NAME(getCurrentController()) }}</p>
         </div>
     </div>
     <div class="col-lg-2 col-lg-offset-8">
@@ -46,10 +49,10 @@
                 Câmera
             </button>
             <div class="btn-group">
-                <button class="btn btn-success" ng-disabled="!serialPortConnected() || getState()" ng-click="openSerial()">
+                <button class="btn btn-success" ng-disabled="!serialPortConnected() || getState() || !isSetController()" ng-click="openSerial()">
                     Ligar
                 </button>
-                <button class="btn btn-danger" ng-disabled="!serialPortConnected() || !getState()" ng-click="closeSerial()">
+                <button class="btn btn-danger" ng-disabled="!serialPortConnected() || !getState() || isSetController()" ng-click="closeSerial()">
                     Desligar
                 </button>
             </div>&nbsp;

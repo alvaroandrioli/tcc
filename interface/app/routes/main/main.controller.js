@@ -1,5 +1,5 @@
 angular.module("controlBenchApp")
-    .controller("mainController", function($scope, $http, socket, serialPort, switchService, $uibModal) {
+    .controller("mainController", function($scope, $http, socket, serialPort, switchService, $uibModal, ControllerService) {
         $scope.dataArfagem = [{
             type: "spline",
             showInLegend: true,
@@ -65,7 +65,6 @@ angular.module("controlBenchApp")
         });
 
         var openLoadingModal = function() {
-            console.log("aqui");
             $uibModal.open({
                 animation: true,
                 ariaLabelledBy: 'Loading',
@@ -79,6 +78,14 @@ angular.module("controlBenchApp")
                 },
                 size: 'sm'
             });
+        }
+
+        $scope.isSetController = function() {
+            return ControllerService.getCurrent().length != 0;
+        }
+
+        $scope.getCurrentController = function() {
+            return ControllerService.getCurrent();
         }
 
         $scope.openCamModal = function() {

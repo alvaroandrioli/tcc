@@ -29,7 +29,6 @@ angular.module("controlBenchApp")
 
         $rootScope.$on('$stateChangeStart', function(event, toState){
             $rootScope.CURRENT_STATE = toState.name;
-            console.log($rootScope.CURRENT_STATE);
             Alert.clearAll();
         });
     });

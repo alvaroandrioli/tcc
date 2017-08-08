@@ -60,10 +60,10 @@ def handleSocketDataInit(socketio):
         
         try:
             hController.setYamController(identification)
-            hController.setYamParams(vparams[1:])
-            socketio.emit("CONTROL.SET.YAM.RES", 1)
+            hController.setTravelParams(vparams[1:])
+            socketio.emit("CONTROL.SET.TRAVEL.RES", 1)
         except:
-            socketio.emit("CONTROL.SET.YAM.RES", 0)
+            socketio.emit("CONTROL.SET.TRAVEL.RES", 0)
             
     
         

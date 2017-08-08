@@ -8,7 +8,7 @@ import logging
 from src.handleSocket import handleSocketDataInit
 from src.handleSerialData import handleSerialDataInit
 
-logging.basicConfig(level=logging.ERROR,
+logging.basicConfig(level=logging.INFO,
                     format="[%(asctime)s] %(name)s [%(levelname)s] - %(message)s")
 
 logger = logging.getLogger('Main') 

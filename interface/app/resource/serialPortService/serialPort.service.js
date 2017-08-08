@@ -1,9 +1,9 @@
 angular.module("controlBenchApp")
     .factory("serialPort", function(socket) {
-        var _isConnected = false;
+        var _pisConnected = false;
 
         var _isConnected = function() {
-            return _isConnected;
+            return _pisConnected;
         }
 
         var _refresh = function() {
@@ -11,11 +11,11 @@ angular.module("controlBenchApp")
         }
 
         socket.on("SERIAL.REFRESH.RECEIVE", function(isConnected) {
-            _isConnected = isConnected == true;
+            _pisConnected = isConnected == true;
         });
 
         return {
-            isConnected: _isConnected,
-            refresh: _refresh
+            "isConnected": _isConnected,
+            "refresh": _refresh
         };
     });
