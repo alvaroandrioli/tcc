@@ -6,44 +6,39 @@ Created on 22 de mar de 2017
 import logging
 from src.eventEmitter import EventEmitter
 from src.control import HandleController
+from src.dataStorage import DataStorage
 
 logger = logging.getLogger("handleSerialDataInit")
 
 def handleSerialDataInit(socketio):
     hController = HandleController()
-    pitchFeedback = list()
-    travelFeedback = list()
+    rollFeedback = list()
     ee = EventEmitter()
+    ds = DataStorage()
     
     @ee.on("SERIAL.READ_DATA")
     def serialReadData(data):
         logger.debug("serialReadData received data - {}".format(data))
         if (len(data) >= 7):
-            pitchSp, pitchS, travelSp, travelS = data.split(",")
-            pitchSp = int(pitchSp)
-            travelSp = int(travelSp)
-            pitchS = int(pitchS)
-            travelS = int(travelS)
+            rollSp, rollS = data.split(",")
             
-            pitchE = pitchSp - pitchS;
-            travelE = travelSp - travelS;
+            rollSp = int(rollSp)
+            rollS = int(rollS)
+            
+            rollE = rollSp - rollS;
             logger.debug("SOCKET EVENT - SERIAL.EMIT_DATA - emit {}".format(data))
             
-            if (len(pitchFeedback) <= 5 and len(travelFeedback) <= 5):
-                pitchFeedback.append(pitchE)
-                travelFeedback.append(travelE)
+            if (len(rollFeedback) <= 5):
+                rollFeedback.append(rollE)
             else:
-                pitchFeedback.pop(0)
-                pitchFeedback.append(pitchE)
-               
-                travelFeedback.pop(0)
-                travelFeedback.append(travelE)
-                
-           
-            pitchC = normalize(hController.executePitch(pitchFeedback))
-            travelC = normalize(hController.executeTravel(travelFeedback))
+                rollFeedback.pop(0)
+                rollFeedback.append(rollE)
             
-            controlBuffer = '{},{}\n'.format(pitchC, travelC)
+            rollC = normalize(hController.executeRoll(rollFeedback))
+            
+            ds.write(rollE, rollC)
+            
+            controlBuffer = '{}\n'.format(rollC)
             
             ee.emit("SERIAL.WRITE_DATA", controlBuffer)
             socketio.emit("SERIAL.EMIT_DATA", data)

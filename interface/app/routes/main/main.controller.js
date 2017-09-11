@@ -1,68 +1,25 @@
 angular.module("controlBenchApp")
     .controller("mainController", function($scope, $http, socket, serialPort, switchService, $uibModal, ControllerService) {
-        $scope.dataArfagem = [{
-            type: "spline",
-            showInLegend: true,
-            name: 'Referencia',
-            dataPoints: [{x:0, y:0},{x:1, y:0},{x:2, y:0},{x:3, y:0},{x:4, y:0},{x:5, y:0},{x:6, y:0},{x:7, y:0},{x:8, y:0},{x:9, y:0}]
-        },{
-            type: "spline",
-            showInLegend: true,
-            name: 'Sensor',
-            dataPoints: [{x:0, y:0},{x:1, y:0},{x:2, y:0},{x:3, y:0},{x:4, y:0},{x:5, y:0},{x:6, y:0},{x:7, y:0},{x:8, y:0},{x:9, y:0}]
-        }];
+        
+        $scope.sinalizeChart = false;
+        
+        $scope.widgets = [];
 
-        $scope.dataTranslacao = [{
-            type: "spline",
-            showInLegend: true,
-            name: 'Referencia',
-            dataPoints: [{x:0, y:0},{x:1, y:0},{x:2, y:0},{x:3, y:0},{x:4, y:0},{x:5, y:0},{x:6, y:0},{x:7, y:0},{x:8, y:0},{x:9, y:0}]
-        },{
-            type: "spline",
-            showInLegend: true,
-            name: 'Sensor',
-            dataPoints: [{x:0, y:0},{x:1, y:0},{x:2, y:0},{x:3, y:0},{x:4, y:0},{x:5, y:0},{x:6, y:0},{x:7, y:0},{x:8, y:0},{x:9, y:0}]
-        }];
+        $scope.gridOptions = {
+            cellHeight: 50,
+            verticalMargin: 0,
+            height: 13
+        };
 
-        var arfagemChart = new CanvasJS.Chart("arfagemChart", {
-            title: {
-                text: "Arfagem"
-            },
-            legend: {
-                horizontalAlign: "right", // left, center ,right
-                verticalAlign: "center",  // top, center, bottom
-            },
-            axisY: {
-                maximum: 1100,
-                minimun: 0
-            },
-            axisX: {
-                labelFormatter: function(e) {
-                    return  "";
-                }
-            },
-            data: $scope.dataArfagem
-        });
+        var resertUpdateChart = function() {
+            $scope.sinalizeChart = !$scope.sinalizeChart;
+        }
 
-        var translacaoChart = new CanvasJS.Chart("translacaoChart", {
-            title: {
-                text: "Translação"
-            },
-            legend: {
-                horizontalAlign: "right", // left, center ,right
-                verticalAlign: "center",  // top, center, bottom
-            },
-            axisY: {
-                maximum: 1100,
-                minimun: -1100
-            },
-            axisX: {
-                labelFormatter: function(e) {
-                    return  "";
-                }
-            },
-            data: $scope.dataTranslacao
-        });
+        $scope.onResizeStop = function(event,ui) {
+            $scope.sinalizeChart = !$scope.sinalizeChart;
+
+            setTimeout(resertUpdateChart, 100);
+        }
 
         var openLoadingModal = function() {
             $uibModal.open({
@@ -108,25 +65,6 @@ angular.module("controlBenchApp")
             });
         }
 
-        socket.on("SERIAL.EMIT_DATA", function(data) {
-            // $scope.response = data;
-            var dataList = data.split(",");
-            for (var dataI in dataList) {
-                var data = parseFloat(dataList[dataI]);
-
-                if (dataI <= 1) {
-                    $scope.dataArfagem[dataI].dataPoints = shifit($scope.dataArfagem[dataI].dataPoints);
-                    $scope.dataArfagem[dataI].dataPoints.push({'x': 9, 'y': data});
-                } else {
-                    $scope.dataTranslacao[dataI - 2].dataPoints = shifit($scope.dataTranslacao[dataI - 2].dataPoints);
-                    $scope.dataTranslacao[dataI - 2].dataPoints.push({'x': 9, 'y': data});
-                }
-            }
-
-            arfagemChart.render();
-            translacaoChart.render();
-        });
-
         $scope.openSerial = function() {
             switchService.setState(true);
             socket.emit("SERIAL.BEGIN");
@@ -139,14 +77,9 @@ angular.module("controlBenchApp")
         }
 
         $scope.clearGraphs = function() {
-            $scope.dataArfagem[0].dataPoints = [{x:0, y:0},{x:1, y:0},{x:2, y:0},{x:3, y:0},{x:4, y:0},{x:5, y:0},{x:6, y:0},{x:7, y:0},{x:8, y:0},{x:9, y:0}];
-            $scope.dataArfagem[1].dataPoints = [{x:0, y:0},{x:1, y:0},{x:2, y:0},{x:3, y:0},{x:4, y:0},{x:5, y:0},{x:6, y:0},{x:7, y:0},{x:8, y:0},{x:9, y:0}];
+            $scope.dataPlot.dataPoints = generateZeroData(MAX);
 
-            $scope.dataTranslacao[0].dataPoints = [{x:0, y:0},{x:1, y:0},{x:2, y:0},{x:3, y:0},{x:4, y:0},{x:5, y:0},{x:6, y:0},{x:7, y:0},{x:8, y:0},{x:9, y:0}];
-            $scope.dataTranslacao[1].dataPoints = [{x:0, y:0},{x:1, y:0},{x:2, y:0},{x:3, y:0},{x:4, y:0},{x:5, y:0},{x:6, y:0},{x:7, y:0},{x:8, y:0},{x:9, y:0}];
-
-            arfagemChart.render();
-            translacaoChart.render();
+            realTimeChart.render();
         }
 
         $scope.serialPortConnected = function() {
@@ -157,18 +90,24 @@ angular.module("controlBenchApp")
             return switchService.getState();
         }
 
-        function shifit(dataPoints) {
-            var res = [];
+       
+        //
+        // function recursive() {
+        //
+        //         var dataList = [Math.round((Math.random() * 500) + 500), Math.round((Math.random() * 500) + 500)];
+        //         // $scope.response = data;
+        //         for (var dataI in dataList) {
+        //             var data = parseFloat(dataList[dataI]);
+        //
+        //             $scope.dataPlot[dataI].dataPoints = shifit($scope.dataPlot[dataI].dataPoints);
+        //             $scope.dataPlot[dataI].dataPoints.push({'x': MAX, 'y': data});
+        //         }
+        //
+        //         realTimeChart.render();
+        //
+        //         setTimeout(recursive, 20);
+        // }
+        //
+        // recursive();
 
-            for (var k = 1; k < dataPoints.length; k++) {
-                var data = dataPoints[k];
-                data.x--;
-                res.push(data);
-            }
-
-            return res;
-        }
-
-        arfagemChart.render();
-        translacaoChart.render();
     });

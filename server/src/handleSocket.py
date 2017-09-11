@@ -11,6 +11,7 @@ from src.eventEmitter import EventEmitter
 from src.stateConstants import StateConstants
 from src.control import HandleController
 from time import sleep
+from src.dataStorage import DataStorage
 
 logger = logging.getLogger("handleSocketDataInit")
 
@@ -18,13 +19,17 @@ logger = logging.getLogger("handleSocketDataInit")
 def handleSocketDataInit(socketio):
     hController = HandleController()
     ee = EventEmitter()
-       
+    ds = DataStorage
+    
     @socketio.on("SERIAL.BEGIN")
     def readSerialBegin():
         sc = StateConstants()
         sc.setConstant('SERIAL.OPEN', True)
         logger.info("SOCKET EVENT SERIAL.BEGIN received")
         Thread(target=readSerial).start()
+        
+        ds.createNew();
+        
         sleep(2)
         socketio.emit("SERIAL.BEGIN.RES")
         
@@ -32,6 +37,7 @@ def handleSocketDataInit(socketio):
     def readSerialStop():
         sc = StateConstants()
         sc.setConstant("SERIAL.OPEN", False)
+        ds.close()
         ee.emit("SERIAL.WRITE_DATA", 'e');
     
     @socketio.on("SERIAL.REFRESH.SEND")
@@ -40,30 +46,18 @@ def handleSocketDataInit(socketio):
         
         socketio.emit("SERIAL.REFRESH.RECEIVE", sc.getConstant("SERIAL.CONNECTED"))
     
-    @socketio.on("CONTROL.SET.PITCH")
+    @socketio.on("CONTROL.SET.ROLL")
     def setPitchController(params):
         vparams = params.split(',')
         identification = vparams[0]
         
         try:
-            hController.setPitchController(identification)
-            hController.setPitchParams(vparams[1:])
-            socketio.emit("CONTROL.SET.PITCH.RES", 1)
+            hController.setRollController(identification)
+            hController.setRollParams(vparams[1:])
+            socketio.emit("CONTROL.SET.ROLL.RES", 1)
         except:
-            socketio.emit("CONTROL.SET.PITCH.RES", 0)
+            socketio.emit("CONTROL.SET.ROLL.RES", 0)
 
-    
-    @socketio.on("CONTROL.SET.YAM")
-    def setYamController(params):
-        vparams = params.split(',')
-        identification = vparams[0]
-        
-        try:
-            hController.setYamController(identification)
-            hController.setTravelParams(vparams[1:])
-            socketio.emit("CONTROL.SET.TRAVEL.RES", 1)
-        except:
-            socketio.emit("CONTROL.SET.TRAVEL.RES", 0)
             
     
         

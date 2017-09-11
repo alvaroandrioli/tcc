@@ -23,6 +23,8 @@
     "angular-bootstrap": "^2.5.0",
     "bootswatch-dist": "cosmo",
     "load-awesome": "^1.1.0",
-    "angular-ui-codemirror": "^0.3.0"
+    "angular-ui-codemirror": "^0.3.0",
+    "gridstack-angular": "^0.5.0",
+    "lodash": "^4.17.4"
   }
 }

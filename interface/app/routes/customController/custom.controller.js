@@ -19,51 +19,35 @@ angular.module("controlBenchApp")
         "\n\t#código aqui" +
         "\n\treturn error";
 
-        $scope.travelCode = initialCodeString;
-        $scope.pitchCode = initialCodeString;
+        $scope.rollCode = initialCodeString;
 
         $scope.send = function() {
-            if ((!$scope.travelCode || !$scope.pitchCode)) {
+            if (!$scope.rollCode) {
                 Alert.danger("Erro!", "É necessário a definição de um código para cada um dos controles!");
             } else {
-                socket.emit("CONTROL.SET.PITCH", "propotional,"+String($scope.pitchGain));
-                socket.emit("CONTROL.SET.YAM", "propotional,"+String($scope.travelGain));
+                socket.emit("CONTROL.SET.ROLL", "propotional,"+String($scope.travelGain));
                 $scope.isLoading = true;
             }
         }
 
         var finalize = function() {
-            if ($scope.pitchRes && $scope.travelRes) {
+            if ($scope.rollCode) {
                 $scope.isLoading = false;
 
                 ControllerService.setCurrent("custom");
 
                 ControllerService.set("custom", JSON.stringify({
-                                                                        "pitch": $scope.pitchCode,
-                                                                        "travel": $scope.travelCode
-                                                                    }));
+                                                                "roll": $scope.rollCode,
+                                                            }));
             }
 
         }
 
-        socket.on("CONTROL.SET.PITCH.RES", function(res) {
+        socket.on("CONTROL.SET.ROLL.RES", function(res) {
             if (res == 1)
-                $scope.pitchRes = true;
-                Alert.success("Atenção!", "Controle de arfagem configurado com sucesso");
+                Alert.success("Atenção!", "Controle de giro configurado com sucesso");
             else
-                $scope.pitchRes = false;
-                Alert.error("Erro!", "Controle de arfagem não pode ser configurado");
-
-            finalize();
-        });
-
-        socket.on("CONTROL.SET.TRAVEL.RES", function(res) {
-            if (res == 1)
-                $scope.travelRes = true;
-                Alert.success("Atenção!", "Controle de translação configurado com sucesso");
-            else
-                $scope.travelRes = false;
-                Alert.error("Erro!", "Controle de translação não pode ser configurado");
+                Alert.error("Erro!", "Controle de giro não pode ser configurado");
 
             finalize();
         });
