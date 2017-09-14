@@ -2,7 +2,8 @@ angular.module("controlBenchApp")
     .controller("mainController", function($scope, $http, socket, serialPort, switchService, $uibModal, ControllerService) {
         
         $scope.sinalizeChart = false;
-        
+        $scope.sinalizeClear = false;
+
         $scope.widgets = [];
 
         $scope.gridOptions = {
@@ -11,14 +12,24 @@ angular.module("controlBenchApp")
             height: 13
         };
 
-        var resertUpdateChart = function() {
+        var resetUpdateChart = function() {
             $scope.sinalizeChart = !$scope.sinalizeChart;
+        }
+
+        var resetClearChart = function() {
+            $scope.sinalizeClear = !$scope.sinalizeClear;
         }
 
         $scope.onResizeStop = function(event,ui) {
             $scope.sinalizeChart = !$scope.sinalizeChart;
 
-            setTimeout(resertUpdateChart, 100);
+            setTimeout(resetUpdateChart, 100);
+        }
+
+        $scope.clickClearButton = function() {
+            $scope.sinalizeClear = !$scope.sinalizeClear;
+            
+            setTimeout(resetUpdateChart, 100);
         }
 
         var openLoadingModal = function() {
@@ -76,12 +87,6 @@ angular.module("controlBenchApp")
             socket.emit("SERIAL.END");
         }
 
-        $scope.clearGraphs = function() {
-            $scope.dataPlot.dataPoints = generateZeroData(MAX);
-
-            realTimeChart.render();
-        }
-
         $scope.serialPortConnected = function() {
             return serialPort.isConnected();
         }
@@ -89,25 +94,4 @@ angular.module("controlBenchApp")
         $scope.getState = function() {
             return switchService.getState();
         }
-
-       
-        //
-        // function recursive() {
-        //
-        //         var dataList = [Math.round((Math.random() * 500) + 500), Math.round((Math.random() * 500) + 500)];
-        //         // $scope.response = data;
-        //         for (var dataI in dataList) {
-        //             var data = parseFloat(dataList[dataI]);
-        //
-        //             $scope.dataPlot[dataI].dataPoints = shifit($scope.dataPlot[dataI].dataPoints);
-        //             $scope.dataPlot[dataI].dataPoints.push({'x': MAX, 'y': data});
-        //         }
-        //
-        //         realTimeChart.render();
-        //
-        //         setTimeout(recursive, 20);
-        // }
-        //
-        // recursive();
-
     });

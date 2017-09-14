@@ -5,7 +5,7 @@ angular.module("controlBenchApp")
         var generateZeroData = function (max) {
             var dataZero = [];
             for (var i = 0; i < max; i++) {
-                dataZero.push({ 'x': i, 'y': 0 });
+                dataZero.push({ 'x': i, 'y': 0, 'indexLabel': 0 });
             }
 
             return dataZero;
@@ -36,8 +36,13 @@ angular.module("controlBenchApp")
         }];
 
         var realTimeChart = new CanvasJS.Chart("realTimeChart", {
+            maintainAspectRatio: false,
+            responsive: true,
             title: {
                 text: ""
+            },
+            toolTip: {
+                enabled	: false
             },
             legend: {
                 horizontalAlign: "right", // left, center ,right
@@ -77,5 +82,34 @@ angular.module("controlBenchApp")
                 realTimeChart.render();
         }), true;
 
+        $scope.$watch('clearChart', function(newValue, oldValue) {
+            if (newValue == true) {
+                $scope.dataPlot[0].dataPoints = generateZeroData(MAX);
+                $scope.dataPlot[1].dataPoints = generateZeroData(MAX);
+                
+                realTimeChart.render();
+            }
+        }), true;
+
         realTimeChart.render();
+
+        
+        // function recursive() {
+        
+        //         var dataList = [Math.round((Math.random() * 500) + 500), Math.round((Math.random() * 500) + 500)];
+        //         // $scope.response = data;
+        //         for (var dataI in dataList) {
+        //             var data = parseFloat(dataList[dataI]);
+        
+        //             $scope.dataPlot[dataI].dataPoints = shifit($scope.dataPlot[dataI].dataPoints);
+        //             $scope.dataPlot[dataI].dataPoints.push({'x': MAX, 'y': data});
+        //         }
+        
+        //         realTimeChart.render();
+        
+        //         setTimeout(recursive, 20);
+        // }
+        
+        // recursive();
+
     });

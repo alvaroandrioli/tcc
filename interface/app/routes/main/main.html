@@ -27,7 +27,7 @@
         <div gridstack class="grid-stack" options="gridOptions" on-resize-stop="onResizeStop(event,ui)">
             <div class="grid-stack-item" gridstack-item gs-item-x="5" gs-item-y="0" gs-item-width="8" gs-item-height="11">
                 <div class="grid-stack-item-content">
-                    <visualize update-chart="sinalizeChart"></visualize>
+                    <visualize update-chart="sinalizeChart" clear-chart="sinalizeClear"></visualize>
                 </div>
             </div>
         </div>
@@ -49,7 +49,7 @@
                     Desligar
                 </button>
             </div>&nbsp;
-            <button class="btn btn-default" ng-disable="getState()" ng-click="clearGraphs()">
+            <button class="btn btn-default" ng-disable="getState()" ng-click="clickClearButton()">
                 Limpar
             </button>
         </div>

@@ -5,7 +5,8 @@ angular.module("controlBenchApp")
         controller: "visualizeDirectiveController",
         restrict: "E",
         scope: {
-            updateChart: '='
+            updateChart: '=',
+            clearChart: '='
         }
     };
 })

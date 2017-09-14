@@ -19,3 +19,8 @@
     left: 0 !important;
     right: 0 !important;
 }
+
+.canvasjs-chart-container, .canvasjs-chart-canvas {
+    height: 100% !important;
+    position: none !important;
+}
