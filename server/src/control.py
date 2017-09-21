@@ -1,7 +1,5 @@
 from abc import ABCMeta, abstractmethod
 import logging
-import string
-
 
 logger = logging.getLogger("HandleController")
 
@@ -24,20 +22,20 @@ class HandleController(object):
                 break
         
     def setRollParams(self, params):
-        logger.error("setRollParams: {}".format(params))
+        logger.info("setRollParams: {}".format(params))
         self.__rollControl.setParams(params)
     
     
     def executeRoll(self, feedback):
-        res = self.__rollControl.execute(feedback)
-        logger.error("executeRoll: error={} controlSignal={}".format(feedback.pop(), res))
+        res = self.__rollControl.execute(feedback[:])
+        logger.info("executeRoll: error={} controlSignal={}".format(feedback.pop(), res))
         return res;
    
     def addControllerFunction(self, controllerFunction):
         logger.info("CONTROL FUNCTION REGISTRED - {}".format(controllerFunction))
         self.__controllerFunctions.append(controllerFunction)
 
-#interface
+# interface
 class ControllerInterface(object):
     __metaclass__ = ABCMeta
     
@@ -53,7 +51,7 @@ class ControllerInterface(object):
     @abstractmethod
     def __str__(self): pass
 
-#implementation
+# implementation
 class PropotionalController(ControllerInterface):
     def __init__(self):
         super(PropotionalController, self).__init__()
@@ -72,7 +70,7 @@ class PropotionalController(ControllerInterface):
         return self.ident
 
 
-#class CustomController(ControllerInterface):
+# class CustomController(ControllerInterface):
 #    def __init__(self):    
 #        super(PropotionalController, self).__init__()
 #        self.ident = 'custom'

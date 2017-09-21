@@ -1,6 +1,7 @@
 angular.module("controlBenchApp")
     .controller("visualizeDirectiveController", function ($scope, socket) {
-        const MAX = 200;
+        const MAX = 40;
+        $scope.time = 0;
 
         var generateZeroData = function (max) {
             var dataZero = [];
@@ -24,12 +25,12 @@ angular.module("controlBenchApp")
         }
 
         $scope.dataPlot = [{
-            type: "spline",
+            type: "line",
             showInLegend: true,
             name: 'Referencia',
             dataPoints: generateZeroData(MAX)
         }, {
-            type: "spline",
+            type: "line",
             showInLegend: true,
             name: 'Sensor',
             dataPoints: generateZeroData(MAX)
@@ -65,7 +66,9 @@ angular.module("controlBenchApp")
         });
 
         socket.on("SERIAL.EMIT_DATA", function (data) {
-            // $scope.response = data;
+            $scope.time = Date.now() - $scope.time;
+
+            $scope.response = data;
             var dataList = data.split(",");
             for (var dataI in dataList) {
                 var data = parseFloat(dataList[dataI]);
@@ -75,6 +78,7 @@ angular.module("controlBenchApp")
             }
 
             realTimeChart.render();
+            // $scope.data = data;
         });
 
         $scope.$watch('updateChart', function(newValue, oldValue) {
@@ -95,21 +99,21 @@ angular.module("controlBenchApp")
 
         
         // function recursive() {
-        
+
         //         var dataList = [Math.round((Math.random() * 500) + 500), Math.round((Math.random() * 500) + 500)];
         //         // $scope.response = data;
         //         for (var dataI in dataList) {
         //             var data = parseFloat(dataList[dataI]);
-        
+
         //             $scope.dataPlot[dataI].dataPoints = shifit($scope.dataPlot[dataI].dataPoints);
         //             $scope.dataPlot[dataI].dataPoints.push({'x': MAX, 'y': data});
         //         }
-        
+
         //         realTimeChart.render();
-        
+
         //         setTimeout(recursive, 20);
         // }
-        
+
         // recursive();
 
     });

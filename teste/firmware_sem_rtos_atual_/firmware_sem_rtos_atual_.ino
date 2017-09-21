@@ -16,8 +16,10 @@ KalmanFilter kalmanY(0.001, 0.003, 0.03);
 
 Servo left;
 Servo right;
+
 int leftC = 0;
 int rightC = 0;
+
 float kalRoll = 0;
 
 boolean shut = false;
@@ -94,11 +96,11 @@ void loop() {
     delayMicroseconds(100);
   }
 
-  if (rollC > 0) {
+  if (rollC >= 0) {
       left.write(map(BASE_ROTATION, 0, 1023, 40, 140));
-      right.write(map(BASE_ROTATION + rollC, 0, 1023, 40, 140));
+      right.write(map((BASE_ROTATION + rollC), 0, 1023, 40, 140));
   } else {
-      left.write(map(BASE_ROTATION + rollC, 0, 1023, 40, 140));
+      left.write(map((BASE_ROTATION + (-1 * rollC)), 0, 1023, 40, 140));
       right.write(map(BASE_ROTATION, 0, 1023, 40, 140));
   }
   

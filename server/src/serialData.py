@@ -68,8 +68,6 @@ def readSerial():
             if not sc.getConstant('SERIAL.OPEN'):
                 break
             
-            
-    
     logger.info("SERIAL STOPED")
     serialMutex = None
     serialPort.close()

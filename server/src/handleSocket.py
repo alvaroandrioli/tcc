@@ -19,17 +19,15 @@ logger = logging.getLogger("handleSocketDataInit")
 def handleSocketDataInit(socketio):
     hController = HandleController()
     ee = EventEmitter()
-    ds = DataStorage
+    ds = DataStorage()
     
     @socketio.on("SERIAL.BEGIN")
     def readSerialBegin():
         sc = StateConstants()
         sc.setConstant('SERIAL.OPEN', True)
         logger.info("SOCKET EVENT SERIAL.BEGIN received")
-        Thread(target=readSerial).start()
-        
         ds.createNew();
-        
+        Thread(target=readSerial).start()        
         sleep(2)
         socketio.emit("SERIAL.BEGIN.RES")
         

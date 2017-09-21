@@ -25,7 +25,7 @@
 <div class="row">
     <div class="col-lg-12">
         <div gridstack class="grid-stack" options="gridOptions" on-resize-stop="onResizeStop(event,ui)">
-            <div class="grid-stack-item" gridstack-item gs-item-x="5" gs-item-y="0" gs-item-width="8" gs-item-height="11">
+            <div class="grid-stack-item" gridstack-item gs-item-x="0" gs-item-y="0" gs-item-width="13" gs-item-height="8">
                 <div class="grid-stack-item-content">
                     <visualize update-chart="sinalizeChart" clear-chart="sinalizeClear"></visualize>
                 </div>
@@ -45,7 +45,7 @@
                 <button class="btn btn-success" ng-disabled="!serialPortConnected() || getState() || !isSetController()" ng-click="openSerial()">
                     Ligar
                 </button>
-                <button class="btn btn-danger" ng-disabled="!serialPortConnected() || !getState() || isSetController()" ng-click="closeSerial()">
+                <button class="btn btn-danger" ng-disabled="!serialPortConnected() || !getState() || !isSetController()" ng-click="closeSerial()">
                     Desligar
                 </button>
             </div>&nbsp;

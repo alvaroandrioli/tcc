@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# -*- coding: ISO-8859-1 -*-
 from flask import Flask
 from flask_socketio import SocketIO
 import sys
@@ -8,9 +8,9 @@ import logging
 from src.handleSocket import handleSocketDataInit
 from src.handleSerialData import handleSerialDataInit
 
-logging.basicConfig(level=logging.INFO,
+logging.basicConfig(level=logging.ERROR,
                     format="[%(asctime)s] %(name)s [%(levelname)s] - %(message)s")
-
+    
 logger = logging.getLogger('Main') 
 
 app = Flask(__name__)

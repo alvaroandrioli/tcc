@@ -19,7 +19,7 @@ def handleSerialDataInit(socketio):
     @ee.on("SERIAL.READ_DATA")
     def serialReadData(data):
         logger.debug("serialReadData received data - {}".format(data))
-        if (len(data) >= 7):
+        if (len(data) >= 3):
             rollSp, rollS = data.split(",")
             
             rollSp = int(rollSp)
@@ -34,14 +34,14 @@ def handleSerialDataInit(socketio):
                 rollFeedback.pop(0)
                 rollFeedback.append(rollE)
             
-            rollC = normalize(hController.executeRoll(rollFeedback))
+            rollC = normalize(hController.executeRoll(rollFeedback[:]))
             
             ds.write(rollE, rollC)
             
             controlBuffer = '{}\n'.format(rollC)
             
-            ee.emit("SERIAL.WRITE_DATA", controlBuffer)
-            socketio.emit("SERIAL.EMIT_DATA", data)
+            ee.emit("SERIAL.WRITE_DATA", "{}".format(controlBuffer))
+            socketio.emit("SERIAL.EMIT_DATA", "{},{}".format(rollS, rollSp))
         else:
             logger.warning("data with len < 7 {}".format(data))
     
@@ -53,8 +53,8 @@ def handleSerialDataInit(socketio):
         value = int(value)
         if value > 1023:
             value = 1023
-        elif value < 0:
-            value = 0
+        elif value < -1023:
+            value = -1023
         
         return value
         

@@ -11,12 +11,14 @@ from click.exceptions import FileError
 
 class DataStorage(object):
     __instance = None
-    __csvPath = "/resource/data_log_";
+    __csvPath = "resource/data.log/data_log_";
     __file = None
     
     def __new__(cls):
         if DataStorage.__instance is None:
             DataStorage.__instance = object.__new__(cls)
+            
+        return DataStorage.__instance
     
     def createNew(self):
         if (self.__file == None):
@@ -25,17 +27,18 @@ class DataStorage(object):
             self.__file = file(csvPath, 'w')
             self.__file.write('error, control\n')
         else:
-            raise FileError('arquivo já aberto')
+            raise FileError('arquivo ja aberto')
     
     def write(self, error, control):
         if (self.__file == None):
-            raise FileNotFoundError('arquivo de escrita não criado')
+            raise FileNotFoundError('arquivo de escrita nao criado')
         else:
-            self.__file.write(str(error) + ', ' + str(control) + '/n')
+            self.__file.write(str(error) + ',' + str(control) + '\n')
             
     def close(self):
         if (self.__file == None):
-            raise FileError('o arquivo não está aberto')
+            raise FileError('o arquivo nao esta aberto')
         else:
             self.__file.close()
+            self.__file = None
         

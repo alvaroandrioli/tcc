@@ -1,80 +1,64 @@
 #include <MsTimer2.h>
-#include <Servo.h>
 
-#define ARFAGEM_PIN 6
-#define GUINADA_PIN 11
-#define ARFAGEM_SP A1
-#define GUINADA_SP A0
 
-Servo guinada;
-Servo arfagem;
-int arfagemC = 0;
-int guinadaC = 0;
+#define LEFT_ROTOR_PIN 10
+#define RIGHT_ROTOR_PIN 6
+#define ROLL_SP A0
+#define BASE_ROTATION 200
+
+int leftC = 0;
+int rightC = 0;
+
+float kalRoll = 0;
+
 boolean shut = false;
 
 void setup() {
+  pinMode(LEFT_ROTOR_PIN, OUTPUT);
+  pinMode(RIGHT_ROTOR_PIN, OUTPUT);
   MsTimer2::set(40, readSensor); //20 mili segundos
   MsTimer2::start();
-   
-  arfagem.attach(ARFAGEM_PIN);
-  guinada.attach(GUINADA_PIN);
-      
-  arfagem.write(40);
-  guinada.write(40);
-
-  delay(1000);
-  
   Serial.begin(115200);
+
 }
 
 void readSensor() {
-  int arfagem_sp = analogRead(ARFAGEM_SP);
-  int guinada_sp = analogRead(GUINADA_SP);
-
-  int arfagem_sensor = 0;
-  int guinada_sensor = 0;
-
-  String serialValue = String(arfagem_sp);
-  serialValue.concat(',');
-  serialValue.concat(arfagem_sensor);
-  serialValue.concat(',');
-  serialValue.concat(guinada_sp);
-  serialValue.concat(',');
-  serialValue.concat(guinada_sensor);
-  
-  Serial.println(serialValue);
+  if (!shut) {
+    int roll_sp = analogRead(ROLL_SP);
+    String serialValue = String(roll_sp);
+    
+    serialValue.concat(',');
+    serialValue.concat(650);
+    
+    Serial.println(serialValue);
+  }
 }
 
 void loop() {
-  char buf[4];
+  char buf[5];
   int index = 0;
-  
+  int rollC = 0;
   while (Serial.available() && !shut) {
     
     char cRead = (char)Serial.read();
 
     if (cRead == 'e') {
-      arfagemC = 0;
-      guinadaC = 0;
+       analogWrite(RIGHT_ROTOR_PIN, 0);
+       analogWrite(LEFT_ROTOR_PIN, 0);
       
-      delay(3);
+      delay(2);
       
       while(Serial.available()){
         char ignore = Serial.read();
       }
+      
       shut = true;
+      
       break;
-    }
-    
-    if (cRead == ',') {
-      index = 0;
-      arfagemC = atoi(buf);
-      clearBuffer(buf);
-      continue;
     }
 
     if (cRead == '\n') {
-      guinadaC = atoi(buf);
+      rollC = atoi(buf);
       clearBuffer(buf);
       break;
     }
@@ -84,8 +68,19 @@ void loop() {
     delayMicroseconds(100);
   }
 
-  arfagem.write(map(arfagemC, 0, 1023, 40, 140));
-  guinada.write(map(guinadaC, 0, 1023, 40, 140));
+  rollC = map(rollC, -1023, 1023, -255, 255);
+
+  if (rollC == 0) {
+    analogWrite(RIGHT_ROTOR_PIN, 0);
+    analogWrite(LEFT_ROTOR_PIN, 0);
+  }
+  if (rollC > 0) {
+     analogWrite(RIGHT_ROTOR_PIN, rollC);
+  }  
+  if (rollC < 0) {
+     analogWrite(LEFT_ROTOR_PIN, (-1 * rollC));
+  }
+  
 }
 
 void clearBuffer(char *vet) {
