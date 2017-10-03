@@ -38,6 +38,7 @@ void loop() {
   char buf[5];
   int index = 0;
   int rollC = 0;
+  boolean test = false;
   while (Serial.available() && !shut) {
     
     char cRead = (char)Serial.read();
@@ -60,6 +61,7 @@ void loop() {
     if (cRead == '\n') {
       rollC = atoi(buf);
       clearBuffer(buf);
+      test = true;
       break;
     }
     
@@ -68,18 +70,22 @@ void loop() {
     delayMicroseconds(100);
   }
 
-  rollC = map(rollC, -1023, 1023, -255, 255);
+  if (test) {
+    rollC = map(rollC, -1023, 1023, -255, 255);
+    
+    if (rollC == 0) {
+      analogWrite(RIGHT_ROTOR_PIN, 0);
+      analogWrite(LEFT_ROTOR_PIN, 0);
+    }
+    if (rollC > 0) {
+       analogWrite(RIGHT_ROTOR_PIN, rollC);
+    }  
+    if (rollC < 0) {
+       analogWrite(LEFT_ROTOR_PIN, (-1 * rollC));
+    }
 
-  if (rollC == 0) {
-    analogWrite(RIGHT_ROTOR_PIN, 0);
-    analogWrite(LEFT_ROTOR_PIN, 0);
-  }
-  if (rollC > 0) {
-     analogWrite(RIGHT_ROTOR_PIN, rollC);
-  }  
-  if (rollC < 0) {
-     analogWrite(LEFT_ROTOR_PIN, (-1 * rollC));
-  }
+    test = false;
+ }
   
 }
 

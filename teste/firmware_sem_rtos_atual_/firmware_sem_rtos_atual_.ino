@@ -1,114 +1,151 @@
-#include <MsTimer2.h>
 #include <Servo.h>
 #include <Wire.h>
 #include <MPU6050.h>
 #include <KalmanFilter.h>
 
-#define LEFT_ROTOR_PIN 11
-#define RIGHT_ROTOR_PIN 6
-#define ROLL_SP A1
-#define BASE_ROTATION 200
+#define LEFT_ROTOR_PIN 3
+#define RIGHT_ROTOR_PIN 10
+#define ROLL_SP A0
+#define BASE_ROTATION 0
 
 MPU6050 mpu;
 
 KalmanFilter kalmanX(0.001, 0.003, 0.03);
-KalmanFilter kalmanY(0.001, 0.003, 0.03);
+unsigned long mTime;
 
-Servo left;
-Servo right;
+//Servo left;
+//Servo right;
 
 int leftC = 0;
 int rightC = 0;
 
 float kalRoll = 0;
 
-boolean shut = false;
+char buf[15];
+int index = 0;
+int rollC = 0;
+boolean assingControl = false;
 
 void setup() {
-  MsTimer2::set(20, readSensor); //20 mili segundos
-  MsTimer2::start();
-   
-  right.attach(RIGHT_ROTOR_PIN);
-  left.attach(LEFT_ROTOR_PIN);
-      
-  right.write(40);
-  left.write(40);
-  
-  while(!mpu.begin(MPU6050_SCALE_2000DPS, MPU6050_RANGE_2G)) {
-    delay(250);
-  }
-
-  mpu.calibrateGyro();
-  
-  delay(1000);
-  
   Serial.begin(115200);
+  //right.attach(RIGHT_ROTOR_PIN);
+  //left.attach(LEFT_ROTOR_PIN);
+      
+  //right.write(0);
+ // left.write(0);
+  
+  //while(!mpu.begin(MPU6050_SCALE_2000DPS, MPU6050_RANGE_2G)) {
+    //delay(250);
+  //}
+    Serial.println("AQUI");
+  //mpu.calibrateGyro();
+  delay(2000);
 }
 
 void readSensor() {
   Vector acc = mpu.readNormalizeAccel();
   Vector gyr = mpu.readNormalizeGyro();
-
-  float accRoll  = (atan2(acc.YAxis, acc.ZAxis)*180.0)/M_PI;
-
-  kalRoll = kalmanX.update(accRoll, gyr.XAxis);
-  
+  delayMicroseconds(1000);
   int roll_sp = analogRead(ROLL_SP);
-
-  String serialValue = String(roll_sp);
-  serialValue.concat(',');
-  serialValue.concat(kalRoll);
   
-  Serial.println(serialValue);
+  int accRoll  = (atan2(acc.YAxis, acc.ZAxis)*180.0)/M_PI;
+  kalRoll = kalmanX.update(accRoll, gyr.XAxis);
+
+  Serial.print(roll_sp);
+  Serial.print(',');
+  Serial.println(normalizeSensor(round(map(kalRoll, 67, -75, 0, 1024))));
 }
 
-void loop() {
-  char buf[4];
-  int index = 0;
-  int rollC = 0;
+void loop() {   
+  mTime = micros();
   
-  while (Serial.available() && !shut) {
-    
+  while (Serial.available()) {
     char cRead = (char)Serial.read();
-
+    
     if (cRead == 'e') {
       rollC = 0;
       
       delay(2);
+      Serial.println("DESLIGANDO");
+      delayMicroseconds(2000);
       
-      while(Serial.available()){
+      while(Serial.available()) {
         char ignore = Serial.read();
       }
       
-      shut = true;
-      
+      exit(0);
       break;
     }
 
     if (cRead == '\n') {
       rollC = atoi(buf);
-      clearBuffer(buf);
+      clearBuffer();
+      assingControl = true;
+      index=0;
       break;
     }
-    
+      
     buf[index] = cRead;
     index++;
-    delayMicroseconds(100);
-  }
-
-  if (rollC >= 0) {
-      left.write(map(BASE_ROTATION, 0, 1023, 40, 140));
-      right.write(map((BASE_ROTATION + rollC), 0, 1023, 40, 140));
-  } else {
-      left.write(map((BASE_ROTATION + (-1 * rollC)), 0, 1023, 40, 140));
-      right.write(map(BASE_ROTATION, 0, 1023, 40, 140));
+    delayMicroseconds(1000);
   }
   
+  if (assingControl) {
+    if (rollC == 0) {
+        //left.write(normalizeMap(map(BASE_ROTATION, 0, 1023, 40, 60)));
+        //right.write(map(BASE_ROTATION, 0, 1023, 40, 60));
+    }
+    if (rollC > 0) {
+        //left.write(map(BASE_ROTATION, 0, 1023, 40, 60));
+        //right.write(map(rollC, 0, 1023, 40, 60));
+    } 
+    if (rollC < 0) {
+       // left.write(map((-1 * rollC), 0, 1023, 40, 60));
+        //right.write(map(BASE_ROTATION, 0, 1023, 40, 60));
+    }
+    assingControl = false;
+  }
+
+  readSensor();
+
+  //Serial.println((micros() - mTime));
+  if ((micros() - mTime) < 40000)
+    delayMicroseconds(40000 - (micros() - mTime));
 }
 
-void clearBuffer(char *vet) {
-  for (int i = 0; i < 4; i++) {
-    vet[i] = '\0'; 
+void clearBuffer() {
+  for (int i = 0; i < 15; i++) {
+    buf[i] = '\0'; 
   }
+}
+
+//long lowPass(float input) {
+//  float v[3] = {0, 0, 0}; 
+//
+//  v[0] = v[1];
+//  v[1] = v[2];
+//  v[2] = (1 * input) + (-1 * v[0]) + (-2 * v[1]);
+//
+//  return (v[0] + v[2]) + 2 * v[1];
+//}
+
+int normalizeMap(int value) {
+  if (value > 60)
+    return 60;
+
+  if (value < 0)
+    return 0;
+
+  return value;
+}
+
+int normalizeSensor(int value) {
+  if (value > 1023)
+    return 1023;
+
+  if (value < 0)
+    return 0;
+
+  return value;
 }
 

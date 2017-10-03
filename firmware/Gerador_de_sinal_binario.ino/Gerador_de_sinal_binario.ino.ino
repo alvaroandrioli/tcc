@@ -12,51 +12,56 @@ int pino_sensor = A2;
 //Pino de controle do motor
 int pino_motor = 10;
 int pino_motor_2 = 3;
-int valor;
-int vSensor;
 int baseRotation = 50;
+int i = 0;
+int sinal;
+int del = 0;
+int vSensor;
 
 void setup()
 {
   Serial.begin(9600);
   esc.attach(pino_motor);
   esc2.attach(pino_motor_2);
-  Serial.println("Aguardando 2 segundos....");
   esc.write(40);
   esc2.write(40);
-  delay(2000);
+  randomSeed(1);
+  delay(5000);
 }
 
 void loop()
 {
-  //Le o valor do potenciometro
-  valor = analogRead(pino_pot);
-  vSensor = map(analogRead(pino_sensor), 44, 625, 0, 1024);
-  float c = normalize((vSensor - valor) * 1.15);
-  Serial.print("Ref: ");
-  Serial.println(valor);
-  Serial.print("Rensor: ");
-  Serial.println(vSensor);
-  Serial.print("Controle: ");
-  Serial.println(c);
+  if (i == del) {
+    sinal = random(0, 9);
+    if (sinal <= 4) {
+      sinal = -1024;
+    } else {
+      sinal = 1024;
+    }
+    del = random(20, 25);
+    i = 0;
+  }
+  vSensor = analogRead(A2);
   
-  if (c == 0) {
-    Serial.println("NEUTRO");
+  if (sinal == 0) {
     esc.write(baseRotation);
     esc2.write(baseRotation);
   }
-  if (c < 0) {
-    Serial.println("DIREITA");
-    esc.write(map((c * -1), 0, 1024, baseRotation, 60));
+  if (sinal < 0) {
+    esc.write(map((sinal * -1), 0, 1024, baseRotation, 60));
     esc2.write(baseRotation);
   }
-  if (c > 0) {
-    Serial.println("ESQUERDA");
+  if (sinal > 0) {
     esc.write(baseRotation);
-    esc2.write(map(c, 0, 1024, baseRotation, 60));
+    esc2.write(map(sinal, 0, 1024, baseRotation, 60));
   }
-  
-  delay(20);
+
+  Serial.print(sinal);
+  Serial.print(',');
+  Serial.println(map(vSensor, 40, 620, 0, 1024));
+
+  i ++;
+  delay(10);
 }
 
 int normalize(float valor) {
