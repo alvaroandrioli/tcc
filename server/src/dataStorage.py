@@ -25,15 +25,15 @@ class DataStorage(object):
             csvPath = self.__csvPath + datetime.datetime.fromtimestamp(time.time()).strftime('%Y_%m_%d_%H_%M_%S') + '.csv'
            
             self.__file = file(csvPath, 'w')
-            self.__file.write('error, control\n')
+            self.__file.write('sinal,sensor\n')
         else:
             raise FileError('arquivo ja aberto')
     
-    def write(self, error, control):
+    def write(self, sinal, sensor):
         if (self.__file == None):
             raise FileNotFoundError('arquivo de escrita nao criado')
         else:
-            self.__file.write(str(error) + ',' + str(control) + '\n')
+            self.__file.write(str(sinal) + ',' + str(sensor) + '\n')
             
     def close(self):
         if (self.__file == None):

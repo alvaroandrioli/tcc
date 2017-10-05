@@ -1,25 +1,15 @@
 #include <Servo.h>
-#include <Wire.h>
-#include <MPU6050.h>
-#include <KalmanFilter.h>
 
-#define LEFT_ROTOR_PIN 3
+#define LEFT_ROTOR_PIN 6
 #define RIGHT_ROTOR_PIN 10
 #define ROLL_SP A0
-#define BASE_ROTATION 0
+#define ROLL_SENSOR A2
+#define BASE_ROTATION 50
 
-MPU6050 mpu;
-
-KalmanFilter kalmanX(0.001, 0.003, 0.03);
 unsigned long mTime;
 
-//Servo left;
-//Servo right;
-
-int leftC = 0;
-int rightC = 0;
-
-float kalRoll = 0;
+Servo left;
+Servo right;
 
 char buf[15];
 int index = 0;
@@ -28,32 +18,22 @@ boolean assingControl = false;
 
 void setup() {
   Serial.begin(115200);
-  //right.attach(RIGHT_ROTOR_PIN);
-  //left.attach(LEFT_ROTOR_PIN);
+  right.attach(RIGHT_ROTOR_PIN);
+  left.attach(LEFT_ROTOR_PIN);
       
-  //right.write(0);
- // left.write(0);
-  
-  //while(!mpu.begin(MPU6050_SCALE_2000DPS, MPU6050_RANGE_2G)) {
-    //delay(250);
-  //}
-    Serial.println("AQUI");
-  //mpu.calibrateGyro();
+  right.write(40);
+  left.write(40);
   delay(2000);
 }
 
 void readSensor() {
-  Vector acc = mpu.readNormalizeAccel();
-  Vector gyr = mpu.readNormalizeGyro();
-  delayMicroseconds(1000);
+ 
   int roll_sp = analogRead(ROLL_SP);
-  
-  int accRoll  = (atan2(acc.YAxis, acc.ZAxis)*180.0)/M_PI;
-  kalRoll = kalmanX.update(accRoll, gyr.XAxis);
+  int roll_sensor = analogRead(ROLL_SENSOR);
 
   Serial.print(roll_sp);
   Serial.print(',');
-  Serial.println(normalizeSensor(round(map(kalRoll, 67, -75, 0, 1024))));
+  Serial.println(lowPass(normalizeSensor(round(map(roll_sensor, 40, 623, 0, 1024)))));
 }
 
 void loop() {   
@@ -92,16 +72,16 @@ void loop() {
   
   if (assingControl) {
     if (rollC == 0) {
-        //left.write(normalizeMap(map(BASE_ROTATION, 0, 1023, 40, 60)));
-        //right.write(map(BASE_ROTATION, 0, 1023, 40, 60));
+        left.write(BASE_ROTATION);
+        right.write(BASE_ROTATION);
     }
     if (rollC > 0) {
-        //left.write(map(BASE_ROTATION, 0, 1023, 40, 60));
-        //right.write(map(rollC, 0, 1023, 40, 60));
+        left.write(map(BASE_ROTATION, 0, 1023, BASE_ROTATION, 60));
+        right.write(map(rollC, 0, 1023, BASE_ROTATION, 60));
     } 
     if (rollC < 0) {
-       // left.write(map((-1 * rollC), 0, 1023, 40, 60));
-        //right.write(map(BASE_ROTATION, 0, 1023, 40, 60));
+        left.write(map((-1 * rollC), 0, 1023, BASE_ROTATION, 60));
+        right.write(map(BASE_ROTATION, 0, 1023, BASE_ROTATION, 60));
     }
     assingControl = false;
   }
@@ -109,8 +89,8 @@ void loop() {
   readSensor();
 
   //Serial.println((micros() - mTime));
-  if ((micros() - mTime) < 40000)
-    delayMicroseconds(40000 - (micros() - mTime));
+  if ((micros() - mTime) < 20000)
+    delayMicroseconds(20000 - (micros() - mTime));
 }
 
 void clearBuffer() {
@@ -119,15 +99,15 @@ void clearBuffer() {
   }
 }
 
-//long lowPass(float input) {
-//  float v[3] = {0, 0, 0}; 
-//
-//  v[0] = v[1];
-//  v[1] = v[2];
-//  v[2] = (1 * input) + (-1 * v[0]) + (-2 * v[1]);
-//
-//  return (v[0] + v[2]) + 2 * v[1];
-//}
+long lowPass(float input) {
+  float v[3] = {0, 0, 0}; 
+
+  v[0] = v[1];
+  v[1] = v[2];
+  v[2] = (1 * input) + (-1 * v[0]) + (-2 * v[1]);
+
+  return (v[0] + v[2]) + 2 * v[1];
+}
 
 int normalizeMap(int value) {
   if (value > 60)

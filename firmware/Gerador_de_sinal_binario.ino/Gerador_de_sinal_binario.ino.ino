@@ -11,8 +11,8 @@ int pino_pot = A0;
 int pino_sensor = A2;
 //Pino de controle do motor
 int pino_motor = 10;
-int pino_motor_2 = 3;
-int baseRotation = 50;
+int pino_motor_2 = 6;
+int baseRotation = 55;
 int i = 0;
 int sinal;
 int del = 0;
@@ -31,29 +31,30 @@ void setup()
 
 void loop()
 {
-  if (i == del) {
+  if (i == del) { 
     sinal = random(0, 9);
     if (sinal <= 4) {
-      sinal = -1024;
+      sinal = -750;
     } else {
-      sinal = 1024;
+      sinal = 750;
     }
-    del = random(20, 25);
+    del = random(5, 10);
     i = 0;
   }
   vSensor = analogRead(A2);
+  
   
   if (sinal == 0) {
     esc.write(baseRotation);
     esc2.write(baseRotation);
   }
   if (sinal < 0) {
-    esc.write(map((sinal * -1), 0, 1024, baseRotation, 60));
+    esc.write(map((sinal * -1), 0, 1024, 50, 60));
     esc2.write(baseRotation);
   }
   if (sinal > 0) {
     esc.write(baseRotation);
-    esc2.write(map(sinal, 0, 1024, baseRotation, 60));
+    esc2.write(map(sinal, 0, 1024, 50, 60));
   }
 
   Serial.print(sinal);

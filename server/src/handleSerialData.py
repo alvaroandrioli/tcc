@@ -36,18 +36,20 @@ def handleSerialDataInit(socketio):
             
             rollC = normalize(hController.executeRoll(rollFeedback[:]))
             
-            ds.write(rollE, rollC)
+            ds.write(rollS, rollSp)
             
             controlBuffer = '{}\n'.format(rollC)
             
             ee.emit("SERIAL.WRITE_DATA", "{}".format(controlBuffer))
             socketio.emit("SERIAL.EMIT_DATA", "{},{}".format(rollS, rollSp))
+            socketio.sleep(0)
         else:
             logger.warning("data with len < 7 {}".format(data))
     
     @ee.on("SERIAL.REFRESH.VALIDATE")
     def sendValidateWorkbench(value):
         socketio.emit("SERIAL.REFRESH.RECEIVE", value)
+        socketio.sleep(0)
     
     def normalize(value):
         value = int(value)

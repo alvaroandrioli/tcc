@@ -1,6 +1,6 @@
 angular.module("controlBenchApp")
     .controller("visualizeDirectiveController", function ($scope, socket) {
-        const MAX = 40;
+        const MAX = 20;
         $scope.time = 0;
 
         var generateZeroData = function (max) {
@@ -27,7 +27,7 @@ angular.module("controlBenchApp")
         $scope.dataPlot = [{
             type: "line",
             showInLegend: true,
-            name: 'Referencia',
+            name: 'Entrada',
             dataPoints: generateZeroData(MAX)
         }, {
             type: "line",
@@ -50,11 +50,8 @@ angular.module("controlBenchApp")
                 verticalAlign: "center",  // top, center, bottom
             },
             axisY: {
-                maximum: 1500,
+                maximum: 1250,
                 minimun: 0,
-                labelFormatter: function (e) {
-                    return Math.round(e.value * 0.12) + 2;
-                },
                 title: "Ângulo"
             },
             axisX: {
@@ -66,19 +63,17 @@ angular.module("controlBenchApp")
         });
 
         socket.on("SERIAL.EMIT_DATA", function (data) {
-            $scope.time = Date.now() - $scope.time;
+            // $scope.response = data;
+            // var dataList = data.split(",");
+            // for (var dataI in dataList) {
+            //     var data = parseFloat(dataList[dataI]);
 
-            $scope.response = data;
-            var dataList = data.split(",");
-            for (var dataI in dataList) {
-                var data = parseFloat(dataList[dataI]);
+            //     $scope.dataPlot[dataI].dataPoints = shifit($scope.dataPlot[dataI].dataPoints);
+            //     $scope.dataPlot[dataI].dataPoints.push({ 'x': MAX, 'y': data });
+            // }
 
-                $scope.dataPlot[dataI].dataPoints = shifit($scope.dataPlot[dataI].dataPoints);
-                $scope.dataPlot[dataI].dataPoints.push({ 'x': MAX, 'y': data });
-            }
-
-            realTimeChart.render();
-            // $scope.data = data;
+            // realTimeChart.render();
+            $scope.data = data;
         });
 
         $scope.$watch('updateChart', function(newValue, oldValue) {

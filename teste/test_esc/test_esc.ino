@@ -11,7 +11,7 @@ int pino_pot = A0;
 int pino_sensor = A2;
 //Pino de controle do motor
 int pino_motor = 10;
-int pino_motor_2 = 3;
+int pino_motor_2 = 6;
 int valor;
 int vSensor;
 int baseRotation = 50;
@@ -32,13 +32,12 @@ void loop()
   //Le o valor do potenciometro
   valor = analogRead(pino_pot);
   vSensor = map(analogRead(pino_sensor), 44, 625, 0, 1024);
-  float c = normalize((vSensor - valor) * 1.15);
-  Serial.print("Ref: ");
-  Serial.println(valor);
-  Serial.print("Rensor: ");
-  Serial.println(vSensor);
-  Serial.print("Controle: ");
-  Serial.println(c);
+  float erro = normalize((vSensor - valor));
+  float buff = 0;
+  float diff = 0;
+  diff = erro - buff;
+  float c = erro + buff * 1.4 + diff;
+  Serial.print(c);
   
   if (c == 0) {
     Serial.println("NEUTRO");
@@ -56,7 +55,8 @@ void loop()
     esc2.write(map(c, 0, 1024, baseRotation, 60));
   }
   
-  delay(20);
+  delay(1);
+  buff = erro;
 }
 
 int normalize(float valor) {

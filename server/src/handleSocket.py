@@ -52,9 +52,9 @@ def handleSocketDataInit(socketio):
         try:
             hController.setRollController(identification)
             hController.setRollParams(vparams[1:])
-            socketio.emit("CONTROL.SET.ROLL.RES", 1)
+            socketio.emit("CONTROL.SET.ROLL.RES", '1')
         except:
-            socketio.emit("CONTROL.SET.ROLL.RES", 0)
+            socketio.emit("CONTROL.SET.ROLL.RES", '0')
 
             
     
