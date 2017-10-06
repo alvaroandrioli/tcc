@@ -1,6 +1,4 @@
-//Programa: Controle de motor brushless EMAX CF2822
-//Autor : Arduino e Cia
-
+#include <MsTimer2.h>
 #include <Servo.h>
 
 Servo esc;
@@ -13,10 +11,13 @@ int pino_sensor = A2;
 int pino_motor = 10;
 int pino_motor_2 = 6;
 int baseRotation = 55;
-int i = 0;
 int sinal;
-int del = 0;
 int vSensor;
+int r = 1;
+int maxQuant = 20;
+int tDelay = 350;
+int exec = 0;
+int cont = 0;
 
 void setup()
 {
@@ -25,24 +26,23 @@ void setup()
   esc2.attach(pino_motor_2);
   esc.write(40);
   esc2.write(40);
-  randomSeed(1);
+  MsTimer2::set(10, readSensor);  
+  delay(2000);
+  esc.write(55);
+  esc2.write(54);
   delay(5000);
+  MsTimer2::start();
 }
 
 void loop()
 {
-  if (i == del) { 
-    sinal = random(0, 9);
-    if (sinal <= 4) {
-      sinal = -750;
-    } else {
-      sinal = 750;
-    }
-    del = random(5, 10);
-    i = 0;
+  if (r == 1) {
+    sinal = -650;
+    r = 0;
+  } else {
+    sinal = 650;
+    r = 1;  
   }
-  vSensor = analogRead(A2);
-  
   
   if (sinal == 0) {
     esc.write(baseRotation);
@@ -57,12 +57,19 @@ void loop()
     esc2.write(map(sinal, 0, 1024, 50, 60));
   }
 
-  Serial.print(sinal);
-  Serial.print(',');
-  Serial.println(map(vSensor, 31, 609, 0, 1024));
+  if (cont == maxQuant) {
+    maxQuant = 2 * maxQuant;
+    tDelay = round(tDelay/2);
+    cont = 0;
+    exec ++;
 
-  i ++;
-  delay(10);
+    if (exec == 4) {
+      exit(0);
+    }
+  }
+
+  cont++;
+  delay(tDelay);
 }
 
 int normalize(float valor) {
@@ -76,5 +83,13 @@ int normalize(float valor) {
     return -1024;
 
   return valor;
+}
+
+void readSensor() {
+  vSensor = analogRead(pino_sensor);
+
+  Serial.print(sinal);
+  Serial.print(',');
+  Serial.println(map(vSensor, 31, 609, 0, 1024));
 }
 
