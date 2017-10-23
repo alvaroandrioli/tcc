@@ -6,7 +6,7 @@
 #define pino_pot A0
 #define pino_sensor A2
 
-#define pino_motor 10
+#define pino_motor 11
 #define pino_motor_2 5
 
 Servo esc;
@@ -25,7 +25,7 @@ int off = 0;
 
 void setup()
 {
-  Serial.begin(9600);
+  Serial.begin(115200);
   
   esc.attach(pino_motor);
   esc2.attach(pino_motor_2);
@@ -40,24 +40,12 @@ void setup()
 
 void loop()
 {
-  vSensor = map(analogRead(pino_sensor), 31, 609, 0, 1024);
-  
-  if (rep == cont) {
-    int ale = random(0,10);
-    rep = random(10, 15);
-    
-    if (ale >= 4) {
-      off = -250;
-    } else {
-      off = 250; 
-    }
-
-    cont = 0;
-    ref = 560 + off;
-  }
+  vSensor = map(analogRead(pino_sensor), 31, 590, 0, 1024);
+  //vSensor = analogRead(pino_sensor);
+  ref = analogRead(pino_pot);
 
   float erro = normalize(ref - vSensor);
-  float c = erro ;
+  float c = erro * 1.01 ;
   
   if (c == 0) {
     esc.write(baseRotation);
@@ -76,8 +64,7 @@ void loop()
   Serial.print(",");
   Serial.println(vSensor);
 
-  cont++;
-  delay(10);
+  delay(20);
 }
 
 int normalize(float valor) {

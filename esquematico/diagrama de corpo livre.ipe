@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE ipe SYSTEM "ipe.dtd">
 <ipe version="70206" creator="Ipe 7.2.7">
-<info created="D:20170824192846" modified="D:20170824193522"/>
+<info created="D:20170824192846" modified="D:20171010180857"/>
 <ipestyle name="basic">
 <symbol name="arrow/arc(spx)">
 <path stroke="sym-stroke" fill="sym-stroke" pen="sym-pen">
@@ -308,7 +308,7 @@ h
 232 696 m
 232 672 l
 </path>
-<path matrix="-1 -0 0 -1 464 1368" stroke="red" fill="black" arrow="normal/normal">
+<path matrix="-1 0 0 -1 464 1368" stroke="red" fill="black" arrow="normal/normal">
 232 696 m
 232 672 l
 </path>
@@ -327,5 +327,27 @@ h
 232 672 m
 324 672 l
 </path>
+<path matrix="1 0 0 1 1.38548 0.515021" stroke="red">
+168 660 m
+175.968 662.557 l
+178.364 655.093 l
+170.396 652.536 l
+h
+</path>
+<use name="mark/disk(sx)" pos="174.64 657.901" size="small" stroke="red"/>
+<text matrix="1 0 0 1 -6.89112 -9.64757" transformations="translations" pos="180.014 674.537" stroke="black" type="label" width="9.089" height="6.923" depth="1.49" valign="baseline" style="math">\theta_r</text>
+<path stroke="black" dash="dashed" arrow="normal/normal" rarrow="normal/normal">
+169.997 641.898 m
+234.048 664.803 l
+</path>
+<path stroke="red">
+169.809 641.781 m
+166.712 649.163 l
+</path>
+<path stroke="red">
+234.402 664.876 m
+231.815 670.479 l
+</path>
+<text matrix="1 0 0 1 -0.815731 -5.14538" transformations="translations" pos="201.689 650.193" stroke="black" type="label" width="3.169" height="6.918" depth="0" valign="baseline" style="math">l</text>
 </page>
 </ipe>
