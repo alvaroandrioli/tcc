@@ -63,17 +63,17 @@ angular.module("controlBenchApp")
         });
 
         socket.on("SERIAL.EMIT_DATA", function (data) {
-            // $scope.response = data;
-            // var dataList = data.split(",");
-            // for (var dataI in dataList) {
-            //     var data = parseFloat(dataList[dataI]);
+            $scope.response = data;
+            var dataList = data.split(",");
+            for (var dataI in dataList) {
+                var data = parseFloat(dataList[dataI]);
 
-            //     $scope.dataPlot[dataI].dataPoints = shifit($scope.dataPlot[dataI].dataPoints);
-            //     $scope.dataPlot[dataI].dataPoints.push({ 'x': MAX, 'y': data });
-            // }
+                $scope.dataPlot[dataI].dataPoints = shifit($scope.dataPlot[dataI].dataPoints);
+                $scope.dataPlot[dataI].dataPoints.push({ 'x': MAX, 'y': data });
+            }
 
-            // realTimeChart.render();
-            $scope.data = data;
+            realTimeChart.render();
+            // $scope.data = data;
         });
 
         $scope.$watch('updateChart', function(newValue, oldValue) {

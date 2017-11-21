@@ -1,7 +1,7 @@
 #include <Servo.h>
 
-#define LEFT_ROTOR_PIN 6
-#define RIGHT_ROTOR_PIN 10
+#define LEFT_ROTOR_PIN 5
+#define RIGHT_ROTOR_PIN 11
 #define ROLL_SP A0
 #define ROLL_SENSOR A2
 #define BASE_ROTATION 50
@@ -21,13 +21,12 @@ void setup() {
   right.attach(RIGHT_ROTOR_PIN);
   left.attach(LEFT_ROTOR_PIN);
       
-  right.write(40);
-  left.write(40);
+  right.write(42);
+  left.write(42);
   delay(2000);
 }
 
 void readSensor() {
- 
   int roll_sp = analogRead(ROLL_SP);
   int roll_sensor = analogRead(ROLL_SENSOR);
 
@@ -47,7 +46,7 @@ void loop() {
       
       delay(2);
       Serial.println("DESLIGANDO");
-      delayMicroseconds(2000);
+      delayMicroseconds(100);
       
       while(Serial.available()) {
         char ignore = Serial.read();
@@ -67,7 +66,7 @@ void loop() {
       
     buf[index] = cRead;
     index++;
-    delayMicroseconds(1000);
+    delayMicroseconds(100);
   }
   
   if (assingControl) {

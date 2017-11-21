@@ -5,7 +5,6 @@ Created on 5 de set de 2017
 '''
 import datetime
 import time
-from numpy.f2py.auxfuncs import throw_error
 from ptyprocess.ptyprocess import FileNotFoundError
 from click.exceptions import FileError
 
@@ -31,7 +30,8 @@ class DataStorage(object):
     
     def write(self, sinal, sensor):
         if (self.__file == None):
-            raise FileNotFoundError('arquivo de escrita nao criado')
+            #raise FileNotFoundError('arquivo de escrita nao criado')
+            pass
         else:
             self.__file.write(str(sinal) + ',' + str(sensor) + '\n')
             

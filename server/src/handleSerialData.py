@@ -36,12 +36,12 @@ def handleSerialDataInit(socketio):
             
             rollC = normalize(hController.executeRoll(rollFeedback[:]))
             
-            ds.write(rollS, rollSp)
+            ds.write(rollSp, rollS)
             
             controlBuffer = '{}\n'.format(rollC)
             
             ee.emit("SERIAL.WRITE_DATA", "{}".format(controlBuffer))
-            socketio.emit("SERIAL.EMIT_DATA", "{},{}".format(rollS, rollSp))
+            socketio.emit("SERIAL.EMIT_DATA", "{},{}".format(rollSp, rollS))
             socketio.sleep(0)
         else:
             logger.warning("data with len < 7 {}".format(data))

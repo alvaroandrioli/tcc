@@ -13,7 +13,7 @@ let mainWindow
 
 function createWindow () {
 
-    // var subpy = require('child_process').spawn('python', ['../server/index.py']);
+    //var subpy = require('child_process').spawn('python', ['../server/index.py']);
     // Create the browser window.
     mainWindow = new BrowserWindow({'center': true});
     mainWindow.maximize();
@@ -31,10 +31,10 @@ function createWindow () {
         // in an array if your app supports multi windows, this is the time
         // when you should delete the corresponding element.
         mainWindow = null;
-        // subpy.kill('SIGINT');
+        //subpy.kill('SIGINT');
     });
 
-    // console.log('Server Start');
+    console.log('Server Start');
 }
 
 // This method will be called when Electron has finished
@@ -42,6 +42,9 @@ function createWindow () {
 // Some APIs can only be used after this event occurs.
 app.on('ready', createWindow);
 
+electron.app.on('browser-window-created',function(e,window) {
+    window.setMenu(null);
+});
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
     // On OS X it is common for applications and their menu bar
